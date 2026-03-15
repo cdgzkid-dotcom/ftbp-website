@@ -6,6 +6,7 @@ import Episodes from "@/components/Episodes";
 import About from "@/components/About";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <About />
       <Newsletter />
       <Footer />
+      <WhatsAppButton />
     </ThemeProvider>
   );
 }
