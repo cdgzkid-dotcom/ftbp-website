@@ -21,13 +21,15 @@ const fadeUp = {
 export default function StatsBar() {
   return (
     <section className="bg-bg-alt border-b border-border">
-      <div className="flex flex-wrap">
+      <div className="grid grid-cols-2 md:grid-cols-4">
         {STATS.map((stat, i) => (
           <motion.div
             key={stat.label}
-            className={`flex-1 min-w-[140px] text-center py-5 ${
-              i < STATS.length - 1 ? "border-r border-border" : ""
-            }`}
+            className={`text-center py-6
+              ${i % 2 === 0 ? "border-r border-border" : ""}
+              ${i < 2 ? "border-b border-border md:border-b-0" : ""}
+              ${i < STATS.length - 1 ? "md:border-r md:border-border" : ""}
+            `}
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
