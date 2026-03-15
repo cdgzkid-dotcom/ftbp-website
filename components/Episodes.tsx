@@ -118,7 +118,7 @@ export default function Episodes() {
                 onClick={() => setPlayingId(ep.spotifyId)}
               >
                 <Image
-                  src="/images/ftbp-cover.png"
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/ftbp-cover.png`}
                   alt={ep.title}
                   fill
                   className="object-cover scale-110 group-hover:scale-125 transition-transform duration-500"
