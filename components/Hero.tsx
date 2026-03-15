@@ -83,6 +83,7 @@ export default function Hero() {
             {[
               { label: "🎙 Spotify", href: "https://open.spotify.com/show/2trG9tv2AXRQfHhXfme59T" },
               { label: "📷 Instagram", href: "https://www.instagram.com/fuckthebusinessplan/" },
+              { label: "💬 WhatsApp", href: "https://wa.me/523338155238" },
             ].map((p) => (
               <a
                 key={p.label}
