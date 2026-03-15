@@ -121,7 +121,7 @@ export default function Episodes() {
                   src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/ftbp-cover.png`}
                   alt={ep.title}
                   fill
-                  className="object-cover scale-110 group-hover:scale-125 transition-transform duration-500"
+                  className="object-cover object-top scale-110 group-hover:scale-125 transition-transform duration-500"
                 />
                 {/* Color overlay */}
                 <div
