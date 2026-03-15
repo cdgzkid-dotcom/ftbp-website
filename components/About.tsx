@@ -5,13 +5,13 @@ import { motion } from "framer-motion";
 
 const HOSTS = [
   {
-    image: "/images/christian.jpg",
+    image: `${process.env.NEXT_PUBLIC_BASE_PATH}/images/christian.jpg`,
     name: "Christian Dominguez",
     bio: "Emprendedor serial. Fundador de Sellia y ViM Transporte. Sin filtro sobre lo que funciona y lo que no.",
     linkedin: "https://www.linkedin.com/in/christian-dominguez-90662026",
   },
   {
-    image: "/images/juancarlos.png",
+    image: `${process.env.NEXT_PUBLIC_BASE_PATH}/images/juancarlos.png`,
     name: "Juan Carlos Rico",
     bio: "Co-host y co-conspirador. La otra mitad del caos. Brings the perspective, challenges the assumptions.",
     linkedin: "https://www.linkedin.com/in/jcricoc/",
