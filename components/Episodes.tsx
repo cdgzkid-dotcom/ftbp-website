@@ -23,24 +23,33 @@ const fadeUp = {
   }),
 };
 
-function AudioPlayer({ audioUrl, onClose }: { audioUrl: string; onClose: () => void }) {
+interface PlayerProps {
+  audioUrl: string;
+  imageUrl: string;
+  number: number;
+  pubDate: string;
+  title: string;
+  description: string;
+  onClose: () => void;
+}
+
+function AudioPlayer({ audioUrl, imageUrl, number, pubDate, title, description, onClose }: PlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState("0:00");
-  const [duration, setDuration] = useState("--:--");
+  const [dur, setDur] = useState("--:--");
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
     audio.play().then(() => setPlaying(true)).catch(() => {});
-
     const onTime = () => {
       const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
       setProgress(pct);
       setCurrentTime(fmt(audio.currentTime));
     };
-    const onLoaded = () => setDuration(fmt(audio.duration));
+    const onLoaded = () => setDur(fmt(audio.duration));
     audio.addEventListener("timeupdate", onTime);
     audio.addEventListener("loadedmetadata", onLoaded);
     return () => {
@@ -73,43 +82,67 @@ function AudioPlayer({ audioUrl, onClose }: { audioUrl: string; onClose: () => v
   }
 
   return (
-    <div className="bg-[#111] p-4 flex flex-col gap-3">
-      <audio ref={audioRef} src={audioUrl} preload="metadata" />
-      {/* Progress bar */}
-      <div
-        className="h-1 bg-white/10 rounded-full cursor-pointer relative"
-        onClick={seek}
-      >
-        <div
-          className="h-full bg-gold rounded-full transition-all"
-          style={{ width: `${progress}%` }}
+    <div className="flex flex-col">
+      {/* Cover image */}
+      <div className="relative aspect-video overflow-hidden bg-black">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imageUrl}
+          alt={title}
+          className="absolute inset-0 w-full h-full object-contain"
         />
-      </div>
-      {/* Controls */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={togglePlay}
-          className="w-9 h-9 rounded-full bg-gold flex items-center justify-center flex-shrink-0 hover:scale-110 transition-transform"
-        >
-          {playing ? (
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <rect x="1" y="1" width="3.5" height="10" rx="1" fill="#111" />
-              <rect x="7.5" y="1" width="3.5" height="10" rx="1" fill="#111" />
-            </svg>
-          ) : (
-            <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
-              <path d="M11 7L1 13V1L11 7Z" fill="#111" />
-            </svg>
-          )}
-        </button>
-        <span className="text-[11px] text-white/50 tabular-nums">{currentTime} / {duration}</span>
+        {/* Gradient overlay at bottom for controls */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%)" }} />
+        {/* Close button */}
         <button
           onClick={onClose}
-          className="ml-auto text-white/30 hover:text-white/70 transition-colors text-[11px]"
+          className="absolute top-2.5 right-3 text-white/40 hover:text-white/80 transition-colors text-[13px] z-10"
         >
           ✕
         </button>
+        {/* Controls at bottom of image */}
+        <div className="absolute bottom-0 left-0 right-0 px-4 pb-3 flex flex-col gap-2">
+          {/* Progress bar */}
+          <div
+            className="h-[3px] bg-white/20 rounded-full cursor-pointer"
+            onClick={seek}
+          >
+            <div className="h-full bg-gold rounded-full" style={{ width: `${progress}%` }} />
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={togglePlay}
+              className="w-8 h-8 rounded-full bg-gold flex items-center justify-center flex-shrink-0 hover:scale-110 transition-transform"
+            >
+              {playing ? (
+                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                  <rect x="1" y="1" width="3.5" height="10" rx="1" fill="#111" />
+                  <rect x="7.5" y="1" width="3.5" height="10" rx="1" fill="#111" />
+                </svg>
+              ) : (
+                <svg width="10" height="12" viewBox="0 0 12 14" fill="none">
+                  <path d="M11 7L1 13V1L11 7Z" fill="#111" />
+                </svg>
+              )}
+            </button>
+            <span className="text-[11px] text-white/60 tabular-nums">{currentTime} / {dur}</span>
+          </div>
+        </div>
       </div>
+      {/* Episode info */}
+      <div className="p-4 bg-[#0d0d0d]">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-[10px] font-bold uppercase tracking-[0.10em] text-gold bg-gold-subtle border border-gold-border rounded-[3px] px-[7px] py-[2px]">
+            EP. {number}
+          </span>
+          <span className="text-[11px] font-medium text-text-ter">{pubDate}</span>
+        </div>
+        <h3 className="text-[13px] font-bold leading-[1.45] text-text-pri mb-1 line-clamp-2">{title}</h3>
+        {description && (
+          <p className="text-[11px] text-text-ter leading-[1.5] line-clamp-2">{description}</p>
+        )}
+      </div>
+      <audio ref={audioRef} src={audioUrl} preload="metadata" />
     </div>
   );
 }
@@ -180,17 +213,25 @@ export default function Episodes() {
           >
             {/* Thumbnail or Player */}
             {playingIdx === i ? (
-              <AudioPlayer audioUrl={ep.audioUrl} onClose={() => setPlayingIdx(null)} />
+              <AudioPlayer
+                audioUrl={ep.audioUrl}
+                imageUrl={ep.imageUrl || `${basePath}/images/ftbp-cover.png`}
+                number={ep.number}
+                pubDate={ep.pubDate}
+                title={ep.title}
+                description={ep.description}
+                onClose={() => setPlayingIdx(null)}
+              />
             ) : (
               <div
-                className="relative aspect-video overflow-hidden"
+                className="relative aspect-video overflow-hidden bg-black"
                 onClick={() => setPlayingIdx(i)}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={ep.imageUrl || `${basePath}/images/ftbp-cover.png`}
                   alt={ep.title}
-                  className="absolute inset-0 w-full h-full object-cover object-center scale-110 group-hover:scale-125 transition-transform duration-500"
+                  className="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                 />
                 <div
                   className="absolute inset-0"
@@ -218,25 +259,27 @@ export default function Episodes() {
               </div>
             )}
 
-            {/* Info */}
-            <div className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-[10px] font-bold uppercase tracking-[0.10em] text-gold bg-gold-subtle border border-gold-border rounded-[3px] px-[7px] py-[2px]">
-                  EP. {ep.number}
-                </span>
-                <span className="text-[11px] font-medium text-text-ter">
-                  {ep.pubDate}
-                </span>
+            {/* Info — hidden when player is active (info shows inside player) */}
+            {playingIdx !== i && (
+              <div className="p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.10em] text-gold bg-gold-subtle border border-gold-border rounded-[3px] px-[7px] py-[2px]">
+                    EP. {ep.number}
+                  </span>
+                  <span className="text-[11px] font-medium text-text-ter">
+                    {ep.pubDate}
+                  </span>
+                </div>
+                <h3 className="text-[13px] font-bold leading-[1.45] text-text-pri mb-1 line-clamp-2">
+                  {ep.title}
+                </h3>
+                {ep.description && (
+                  <p className="text-[11px] text-text-ter leading-[1.5] line-clamp-2">
+                    {ep.description}
+                  </p>
+                )}
               </div>
-              <h3 className="text-[13px] font-bold leading-[1.45] text-text-pri mb-1 line-clamp-2">
-                {ep.title}
-              </h3>
-              {ep.description && (
-                <p className="text-[11px] text-text-ter leading-[1.5] line-clamp-2">
-                  {ep.description}
-                </p>
-              )}
-            </div>
+            )}
           </motion.article>
         ))}
       </div>
