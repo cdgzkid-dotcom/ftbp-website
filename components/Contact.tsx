@@ -16,8 +16,6 @@ export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  const apiKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "";
-
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   }
@@ -26,20 +24,21 @@ export default function Contact() {
     e.preventDefault();
     setStatus("sending");
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
+      const data = new FormData();
+      data.append("name", form.name);
+      data.append("email", form.email);
+      data.append("phone", form.phone);
+      data.append("message", form.message);
+      data.append("_subject", `Mensaje de ${form.name} — FTBP`);
+      data.append("_captcha", "false");
+      data.append("_template", "table");
+
+      const res = await fetch("https://formsubmit.co/cdgzkid@gmail.com", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          access_key: apiKey,
-          subject: `Mensaje de ${form.name} — FTBP`,
-          from_name: form.name,
-          email: form.email,
-          phone: form.phone,
-          message: form.message,
-        }),
+        body: data,
+        headers: { Accept: "application/json" },
       });
-      const data = await res.json();
-      setStatus(data.success ? "sent" : "error");
+      setStatus(res.ok ? "sent" : "error");
     } catch {
       setStatus("error");
     }
