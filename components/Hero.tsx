@@ -39,7 +39,7 @@ export default function Hero() {
 
           {/* H1 */}
           <h1 className="hero-h1 font-display text-[42px] lg:text-[54px] font-black uppercase leading-[1.05]">
-            <span className="text-pink">F*ck</span> the business plan,
+            <span className="text-pink">FUCK</span> the business plan,
             <br />
             hazlo de todas formas!
           </h1>
