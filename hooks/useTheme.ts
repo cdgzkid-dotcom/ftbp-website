@@ -28,15 +28,9 @@ export function useThemeState() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const manual = localStorage.getItem("ftbp-theme-manual");
-    if (manual === "true") {
-      const stored = localStorage.getItem("ftbp-theme") as Theme | null;
-      setTheme(stored || getAutoTheme());
-    } else {
-      // Clear any stale auto-saved value
-      localStorage.removeItem("ftbp-theme");
-      setTheme(getAutoTheme());
-    }
+    localStorage.removeItem("ftbp-theme");
+    localStorage.removeItem("ftbp-theme-manual");
+    setTheme(getAutoTheme());
     setMounted(true);
   }, []);
 
@@ -48,12 +42,7 @@ export function useThemeState() {
   }, [theme, mounted]);
 
   const toggleTheme = useCallback(() => {
-    setTheme((prev) => {
-      const next = prev === "dark" ? "light" : "dark";
-      localStorage.setItem("ftbp-theme", next);
-      localStorage.setItem("ftbp-theme-manual", "true");
-      return next;
-    });
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   }, []);
 
   return { theme, toggleTheme, mounted };
