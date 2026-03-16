@@ -4,7 +4,7 @@ import Hero from "@/components/Hero";
 import StatsBar from "@/components/StatsBar";
 import Episodes from "@/components/Episodes";
 import About from "@/components/About";
-import Newsletter from "@/components/Newsletter";
+import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
       <StatsBar />
       <Episodes />
       <About />
-      <Newsletter />
+      <Contact />
       <Footer />
     </ThemeProvider>
   );
