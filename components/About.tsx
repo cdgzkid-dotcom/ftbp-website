@@ -7,7 +7,7 @@ const HOSTS = [
   {
     image: `/images/christian.jpg`,
     name: "Christian Dominguez",
-    bio: "Emprendedor serial. Fundador de Sellia y ViM Transporte. Sin filtro sobre lo que funciona y lo que no.",
+    bio: "Emprendedor serial. Fundó Maniak (exit a Silicon Valley en 2021). Co-fundador de Sellia y Strange Pixels. En misión de demostrar que México es potencia en tech.",
     linkedin: "https://www.linkedin.com/in/christian-dominguez-90662026",
   },
   {
