@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const STATS = [
   { number: "2", label: "Hosts" },
-  { number: "2026", label: "Desde" },
+  { number: "1", label: "Temporada" },
   { number: "GDL", label: "Hecho en Guadalajara" },
   { number: "Semanal", label: "Frecuencia" },
 ];
