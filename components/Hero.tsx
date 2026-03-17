@@ -73,9 +73,9 @@ export default function Hero() {
 
           {/* Host pills */}
           <div className="hero-pills flex items-center gap-2 mb-4 flex-wrap">
-            <HostPill image={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/christian.jpg`} name="Christian Dominguez" href="https://www.linkedin.com/in/christian-dominguez-90662026" />
+            <HostPill image={`/images/christian.jpg`} name="Christian Dominguez" href="https://www.linkedin.com/in/christian-dominguez-90662026" />
             <span className="text-text-ter text-sm">&</span>
-            <HostPill image={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/juancarlos.png`} name="Juan Carlos Rico" href="https://www.linkedin.com/in/jcricoc/" />
+            <HostPill image={`/images/juancarlos.png`} name="Juan Carlos Rico" href="https://www.linkedin.com/in/jcricoc/" />
           </div>
 
           {/* Platform badges */}
@@ -102,7 +102,7 @@ export default function Hero() {
         <div className="hero-cover flex justify-center lg:justify-end">
           <div className="animate-float">
             <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/ftbp-cover.png`}
+              src={`/images/ftbp-cover.png`}
               alt="Fuck The Business Plan - Portada"
               width={248}
               height={248}

@@ -31,10 +31,8 @@ export default function Episodes() {
   const [currentTime, setCurrentTime] = useState("0:00");
   const [dur, setDur] = useState("--:--");
   const audioRef = useRef<HTMLAudioElement>(null);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-
   useEffect(() => {
-    fetch(`${basePath}/episodes.json`)
+    fetch(`/episodes.json`)
       .then((r) => r.json())
       .then((data) => setEpisodes(data.items ?? []))
       .catch(() => {});
@@ -160,7 +158,7 @@ export default function Episodes() {
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={ep.imageUrl || `${basePath}/images/ftbp-cover.png`}
+                  src={ep.imageUrl || `/images/ftbp-cover.png`}
                   alt={ep.title}
                   className={`absolute inset-0 w-full h-full object-contain transition-transform duration-500 ${isActive ? "" : "group-hover:scale-105"}`}
                 />
