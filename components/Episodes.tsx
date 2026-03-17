@@ -36,7 +36,7 @@ export default function Episodes() {
       .then((r) => r.json())
       .then((data) => setEpisodes(data.items ?? []))
       .catch(() => {});
-  }, [basePath]);
+  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
