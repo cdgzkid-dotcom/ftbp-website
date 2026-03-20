@@ -82,6 +82,7 @@ export default function Hero() {
           <div className="hero-badges flex gap-2 flex-wrap">
             {[
               { label: "🎙 Spotify", href: "https://open.spotify.com/show/2trG9tv2AXRQfHhXfme59T" },
+              { label: "🎵 Apple Podcasts", href: "https://podcasts.apple.com/mx/podcast/fuck-the-business-plan/id1886786227" },
               { label: "📷 Instagram", href: "https://www.instagram.com/fuckthebusinessplan/" },
               { label: "💬 WhatsApp", href: "https://wa.me/523338155238" },
             ].map((p) => (
