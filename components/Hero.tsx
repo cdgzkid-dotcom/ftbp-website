@@ -72,6 +72,9 @@ export default function Hero() {
             <a href="https://podcasts.apple.com/mx/podcast/fuck-the-business-plan/id1886786227" target="_blank" rel="noopener noreferrer" className="btn-ghost">
               Escuchar en Apple Podcasts
             </a>
+            <a href="https://music.amazon.com.mx/podcasts/7e4713c0-1dea-4df2-81dd-913a3f1ebf06/fuck-the-business-plan" target="_blank" rel="noopener noreferrer" className="btn-ghost">
+              Escuchar en Amazon Music
+            </a>
           </div>
 
           {/* Host pills */}
@@ -86,6 +89,7 @@ export default function Hero() {
             {[
               { label: "🎙 Spotify", href: "https://open.spotify.com/show/2trG9tv2AXRQfHhXfme59T" },
               { label: "🎵 Apple Podcasts", href: "https://podcasts.apple.com/mx/podcast/fuck-the-business-plan/id1886786227" },
+              { label: "🎶 Amazon Music", href: "https://music.amazon.com.mx/podcasts/7e4713c0-1dea-4df2-81dd-913a3f1ebf06/fuck-the-business-plan" },
               { label: "📷 Instagram", href: "https://www.instagram.com/fuckthebusinessplan/" },
               { label: "💬 WhatsApp", href: "https://wa.me/523338155238" },
             ].map((p) => (
