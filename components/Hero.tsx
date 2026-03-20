@@ -69,6 +69,9 @@ export default function Hero() {
             <a href="https://open.spotify.com/show/2trG9tv2AXRQfHhXfme59T" target="_blank" rel="noopener noreferrer" className="btn-ghost">
               Escuchar en Spotify
             </a>
+            <a href="https://podcasts.apple.com/mx/podcast/fuck-the-business-plan/id1886786227" target="_blank" rel="noopener noreferrer" className="btn-ghost">
+              Escuchar en Apple Podcasts
+            </a>
           </div>
 
           {/* Host pills */}
