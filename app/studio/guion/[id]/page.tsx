@@ -50,7 +50,15 @@ export default function ScriptDetailPage() {
       .then((r) => r.json())
       .then((data) => {
         setScript(data)
-        setEpInput(data.episode_number != null ? String(data.episode_number) : '')
+        if (data.episode_number != null) {
+          setEpInput(String(data.episode_number))
+        } else if (data.content) {
+          const m =
+            data.content.match(/\*\*Episodio:\*\*\s*(\d+)/) ??
+            data.content.match(/\bEpisodio\s+(\d+)\b/i) ??
+            data.content.match(/\bEp\.?\s*(\d+)\b/i)
+          if (m) setEpInput(m[1])
+        }
       })
       .finally(() => setLoading(false))
   }, [id])
