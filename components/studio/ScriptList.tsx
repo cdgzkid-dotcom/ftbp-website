@@ -83,11 +83,9 @@ export default function ScriptList() {
               onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.03)' }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent' }}
             >
-              {(s.season_number || s.episode_number) && (
-                <div style={{ color: 'var(--gold)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '2px' }}>
-                  {s.season_number ? `T${s.season_number}` : ''}{s.season_number && s.episode_number ? ' · ' : ''}{s.episode_number ? `Ep. ${s.episode_number}` : ''}
-                </div>
-              )}
+              <div style={{ color: 'var(--gold)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '2px' }}>
+                {`T${s.season_number ?? 1}`}{s.episode_number ? ` · Ep. ${s.episode_number}` : ''}
+              </div>
               <div style={{ color: 'var(--text-pri)', fontSize: '0.875rem', fontWeight: 600, marginBottom: '1px' }}>
                 {s.guest_name ?? 'Sin invitado'}
               </div>

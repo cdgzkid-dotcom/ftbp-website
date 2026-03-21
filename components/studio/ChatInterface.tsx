@@ -145,10 +145,14 @@ export default function ChatInterface() {
       const guestMatch = scriptContent.match(/\*\*Invitado:\*\*\s*([^—\n]+)/)
       const guest_name = guestMatch ? guestMatch[1].trim() : 'Invitado'
 
+      // Extract episode number from "Episodio N" or "Ep. N" in the content
+      const epMatch = scriptContent.match(/(?:episodio|ep\.?)\s*(\d+)/i)
+      const episode_number = epMatch ? parseInt(epMatch[1]) : null
+
       const res = await fetch('/api/scripts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: scriptContent, title, guest_name, season_number: 1, status: 'draft' }),
+        body: JSON.stringify({ content: scriptContent, title, guest_name, season_number: 1, episode_number, status: 'draft' }),
       })
       const data = await res.json()
       if (data.id) {
