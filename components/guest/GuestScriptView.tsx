@@ -333,9 +333,9 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                title={label}
                 className="guion-platform-btn"
-                style={{ '--brand': brand, display: 'flex', alignItems: 'center', textDecoration: 'none' } as React.CSSProperties}
+                data-label={label}
+                style={{ '--brand': brand, display: 'flex', alignItems: 'center', textDecoration: 'none', position: 'relative' } as React.CSSProperties}
               >
                 <Icon />
               </a>
