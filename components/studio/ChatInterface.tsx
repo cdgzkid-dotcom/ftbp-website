@@ -45,6 +45,7 @@ export default function ChatInterface() {
   const [saving, setSaving] = useState(false)
   const [copiedLink, setCopiedLink] = useState(false)
   const [episodeNum, setEpisodeNum] = useState('')
+  const [seasonNum, setSeasonNum] = useState('1')
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -54,7 +55,20 @@ export default function ChatInterface() {
 
   useEffect(() => {
     const script = extractScript(messages)
-    if (script) setScriptContent(script)
+    if (!script) return
+    setScriptContent(script)
+    // Extract episode number directly from script content
+    const epMatch =
+      script.match(/\*\*Episodio:\*\*\s*(\d+)/) ??
+      script.match(/\bEpisodio\s+(\d+)\b/i) ??
+      script.match(/\bEp\.?\s*(\d+)\b/i)
+    if (epMatch) setEpisodeNum(epMatch[1])
+    // Extract season number
+    const sznMatch =
+      script.match(/\*\*Temporada:\*\*\s*(\d+)/) ??
+      script.match(/\bTemporada\s+(\d+)\b/i) ??
+      script.match(/\bT(\d+)\b/)
+    if (sznMatch) setSeasonNum(sznMatch[1])
   }, [messages])
 
   useEffect(() => {
@@ -171,7 +185,7 @@ export default function ChatInterface() {
       const res = await fetch('/api/scripts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: scriptContent, title, guest_name, season_number: 1, episode_number, status: 'draft' }),
+        body: JSON.stringify({ content: scriptContent, title, guest_name, season_number: seasonNum ? parseInt(seasonNum) : 1, episode_number, status: 'draft' }),
       })
       const data = await res.json()
       if (data.id) {
@@ -338,7 +352,7 @@ export default function ChatInterface() {
             {!scriptId && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <label style={{ color: 'var(--gold)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>
-                  T1 · Ep.
+                  T{seasonNum || 1} · Ep.
                 </label>
                 <input
                   type="number"
