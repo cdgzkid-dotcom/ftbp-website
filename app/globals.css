@@ -209,3 +209,40 @@ body {
 .hero-pills     { animation: fadeUp 0.7s ease-out 0.82s both; }
 .hero-badges    { animation: fadeUp 0.7s ease-out 0.9s both; }
 .hero-cover     { animation: fadeIn 0.8s ease-out 0.2s both; }
+
+/* ===== GUION PAGE — mobile only ===== */
+@media (max-width: 768px) {
+  .guion-page {
+    flex-direction: column !important;
+    padding: 1rem 0.75rem !important;
+    gap: 0.75rem !important;
+  }
+
+  .guion-sidebar {
+    width: 100% !important;
+    position: static !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    padding: 0.25rem 0 !important;
+  }
+
+  .guion-sidebar-cover {
+    width: 48px !important;
+    border-radius: 6px !important;
+  }
+
+  .guion-sidebar-detail {
+    display: none !important;
+  }
+
+  .guion-mobile-brand {
+    display: flex !important;
+  }
+
+  .guion-page h1 {
+    font-size: 1.15rem !important;
+  }
+}
