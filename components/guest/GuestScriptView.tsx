@@ -121,9 +121,13 @@ function EpisodePlayer({ ep }: { ep: Episode }) {
           {playing ? '⏸' : '▶'}
         </button>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ color: '#E0A858', fontSize: '0.6rem', fontWeight: 700, marginBottom: '1px' }}>EP. {ep.number} · {ep.pubDate}</p>
-          {guest && <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.65rem', marginBottom: '2px' }}>{guest}</p>}
-          <p style={{ color: '#F2F0ED', fontSize: '0.725rem', lineHeight: '1.3', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          <p style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.6rem', fontWeight: 600, marginBottom: '2px' }}>EP. {ep.number} · {ep.pubDate}</p>
+          {guest && (
+            <p style={{ color: '#E0A858', fontSize: '0.8rem', fontWeight: 700, marginBottom: '2px', lineHeight: '1.2' }}>
+              {guest}
+            </p>
+          )}
+          <p style={{ color: 'rgba(242,240,237,0.6)', fontSize: '0.7rem', lineHeight: '1.3', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {ep.title.split('—')[0].split('con ')[0].trim()}
           </p>
         </div>
