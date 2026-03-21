@@ -314,30 +314,17 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
       <div className="guion-main" style={{ flex: 1, minWidth: 0 }}>
 
       {/* ── Mobile-only header ── */}
-      <div className="guion-mobile-header" style={{ display: 'none', flexDirection: 'column', gap: '1rem', marginBottom: '1.25rem', padding: '1rem', background: '#1A1B1D', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.07)' }}>
-        {/* Cover + brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
-          <img src="/images/ftbp-cover.png" alt="FTBP" style={{ width: 56, height: 56, borderRadius: 8, flexShrink: 0, border: '1px solid rgba(224,168,88,0.3)' }} />
-          <div>
-            <p style={{ color: '#E0A858', fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1.2 }}>Fuck The Business Plan</p>
-            <p style={{ color: 'rgba(242,240,237,0.45)', fontSize: '0.65rem', marginTop: 2 }}>Podcast de emprendimiento</p>
+      <div className="guion-mobile-header" style={{ display: 'none', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem', padding: '0.875rem', background: '#1A1B1D', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.07)' }}>
+
+        {/* Row 1: Cover + brand name + platform icons (top right) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <img src="/images/ftbp-cover.png" alt="FTBP" style={{ width: 48, height: 48, borderRadius: 8, flexShrink: 0, border: '1px solid rgba(224,168,88,0.3)' }} />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ color: '#E0A858', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1.2 }}>Fuck The Business Plan</p>
+            <p style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.6rem', marginTop: 2 }}>Podcast de emprendimiento</p>
           </div>
-        </div>
-
-        {/* Hosts */}
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          {HOSTS.map(h => (
-            <div key={h.name} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <img src={h.image} alt={h.name} width={28} height={28} style={{ borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(224,168,88,0.4)' }} />
-              <span style={{ color: 'rgba(242,240,237,0.75)', fontSize: '0.72rem', fontWeight: 500 }}>{h.name.split(' ')[0]}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Plataformas */}
-        <div>
-          <p style={{ color: 'rgba(242,240,237,0.35)', fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>Escúchanos en</p>
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          {/* Platform icon circles — top right */}
+          <div style={{ display: 'flex', gap: '0.3rem', flexShrink: 0 }}>
             {MOBILE_PLATFORMS.map(({ label, Icon, color, href }) => (
               <a
                 key={label}
@@ -345,14 +332,24 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={label}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', padding: '0.4rem 0.65rem', borderRadius: 7, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', textDecoration: 'none', color: 'rgba(242,240,237,0.6)', fontSize: '0.7rem', fontWeight: 500 }}
+                style={{ width: 30, height: 30, borderRadius: '50%', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(242,240,237,0.5)', textDecoration: 'none', flexShrink: 0, transition: 'color 0.15s, background 0.15s' }}
               >
-                <span style={{ color }}><Icon /></span>
-                <span>{label}</span>
+                <Icon />
               </a>
             ))}
           </div>
         </div>
+
+        {/* Row 2: Hosts */}
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          {HOSTS.map(h => (
+            <div key={h.name} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <img src={h.image} alt={h.name} width={26} height={26} style={{ borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(224,168,88,0.4)', flexShrink: 0 }} />
+              <span style={{ color: 'rgba(242,240,237,0.7)', fontSize: '0.7rem', fontWeight: 500 }}>{h.name}</span>
+            </div>
+          ))}
+        </div>
+
       </div>
 
       {/* Welcome banner */}
