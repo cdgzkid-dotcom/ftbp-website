@@ -3,6 +3,23 @@
 import { useRef, useState } from 'react'
 import Link from 'next/link'
 
+function parseEpFromContent(content?: string): string {
+  if (!content) return ''
+  const m =
+    content.match(/\*\*Episodio:\*\*\s*(\d+)/) ??
+    content.match(/\bEpisodio\s+(\d+)\b/i) ??
+    content.match(/\bEp\.?\s*(\d+)\b/i)
+  return m ? m[1] : ''
+}
+
+function parseSeasonFromContent(content?: string): string {
+  if (!content) return ''
+  const m =
+    content.match(/\*\*Temporada:\*\*\s*(\d+)/) ??
+    content.match(/\bTemporada\s+(\d+)\b/i)
+  return m ? m[1] : ''
+}
+
 interface ScriptCardProps {
   script: {
     id: string
@@ -11,6 +28,7 @@ interface ScriptCardProps {
     company?: string
     episode_number?: number | string
     season_number?: number | string
+    content?: string
     status?: string
     created_at?: string
   }
@@ -36,7 +54,12 @@ const STATUS_LABELS: Record<string, string> = {
 
 export default function ScriptCard({ script }: ScriptCardProps) {
   const [copied, setCopied] = useState(false)
-  const [epNum, setEpNum] = useState<string>(script.episode_number != null ? String(script.episode_number) : '')
+  const [epNum, setEpNum] = useState<string>(
+    script.episode_number != null
+      ? String(script.episode_number)
+      : parseEpFromContent(script.content)
+  )
+  const season = script.season_number ?? parseSeasonFromContent(script.content) || '1'
   const [editingEp, setEditingEp] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -71,7 +94,6 @@ export default function ScriptCard({ script }: ScriptCardProps) {
   }
 
   const status = script.status ?? 'draft'
-  const season = script.season_number ?? 1
 
   return (
     <div

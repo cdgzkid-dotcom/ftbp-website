@@ -4,6 +4,23 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
+function parseEpFromContent(content?: string): string {
+  if (!content) return ''
+  const m =
+    content.match(/\*\*Episodio:\*\*\s*(\d+)/) ??
+    content.match(/\bEpisodio\s+(\d+)\b/i) ??
+    content.match(/\bEp\.?\s*(\d+)\b/i)
+  return m ? m[1] : ''
+}
+
+function parseSeasonFromContent(content?: string): string {
+  if (!content) return ''
+  const m =
+    content.match(/\*\*Temporada:\*\*\s*(\d+)/) ??
+    content.match(/\bTemporada\s+(\d+)\b/i)
+  return m ? m[1] : ''
+}
+
 interface Script {
   id: string
   share_token: string
@@ -12,6 +29,7 @@ interface Script {
   guest_company?: string
   episode_number?: number | string
   season_number?: number | string
+  content?: string
   status?: string
   created_at?: string
 }
@@ -103,7 +121,8 @@ export default function ScriptList() {
                 onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent' }}
               >
                 <div style={{ color: 'var(--gold)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '2px' }}>
-                  {`T${s.season_number ?? 1}`}{s.episode_number ? ` · Ep. ${s.episode_number}` : ' · Ep. ?'}
+                  {`T${s.season_number ?? parseSeasonFromContent(s.content) || 1}`}
+                  {(() => { const ep = s.episode_number ?? parseEpFromContent(s.content); return ep ? ` · Ep. ${ep}` : ' · Ep. ?' })()}
                 </div>
                 <div style={{ color: 'var(--text-pri)', fontSize: '0.875rem', fontWeight: 600, marginBottom: '1px' }}>
                   {s.guest_name ?? 'Sin invitado'}
