@@ -145,11 +145,26 @@ export default function ChatInterface() {
       const guestMatch = scriptContent.match(/\*\*Invitado:\*\*\s*([^—\n]+)/)
       const guest_name = guestMatch ? guestMatch[1].trim() : 'Invitado'
 
-      // Extract episode number from "**Episodio:** N" or fallback patterns
-      const epMatch =
+      // Extract episode number: first try script content, then scan conversation messages
+      let episode_number: number | null = null
+      const epInScript =
         scriptContent.match(/\*\*Episodio:\*\*\s*(\d+)/) ??
         scriptContent.match(/(?:episodio|ep\.?)[^\d]*(\d+)/i)
-      const episode_number = epMatch ? parseInt(epMatch[1]) : null
+      if (epInScript) {
+        episode_number = parseInt(epInScript[1])
+      } else {
+        // Look for user reply right after AI asks for episode number
+        for (let i = 0; i < messages.length - 1; i++) {
+          const msg = messages[i]
+          if (msg.role === 'assistant' && /episodio|n[uú]mero de ep/i.test(msg.content)) {
+            const reply = messages[i + 1]
+            if (reply?.role === 'user') {
+              const m = reply.content.match(/\d+/)
+              if (m) { episode_number = parseInt(m[0]); break }
+            }
+          }
+        }
+      }
 
       const res = await fetch('/api/scripts', {
         method: 'POST',
