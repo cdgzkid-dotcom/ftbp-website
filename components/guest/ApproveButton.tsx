@@ -19,6 +19,19 @@ export default function ApproveButton({ scriptId }: ApproveButtonProps) {
         body: JSON.stringify({ status: 'approved' }),
       })
       if (res.ok) {
+        // Notificación por correo via FormSubmit
+        const emailData = new FormData()
+        emailData.append('_subject', `✅ Guion aprobado — FTBP`)
+        emailData.append('_captcha', 'false')
+        emailData.append('_template', 'table')
+        emailData.append('Estado', 'Aprobado')
+        emailData.append('Script ID', scriptId)
+        emailData.append('Mensaje', 'El invitado aprobó el guion. Pueden proceder con la grabación.')
+        await fetch('https://formsubmit.co/cdgzkid@gmail.com', {
+          method: 'POST',
+          body: emailData,
+          headers: { Accept: 'application/json' },
+        })
         setStatus('done')
       } else {
         setStatus('idle')

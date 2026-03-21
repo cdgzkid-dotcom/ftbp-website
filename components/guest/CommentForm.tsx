@@ -29,6 +29,22 @@ export default function CommentForm({ scriptId, blockRef, onSubmitted }: Comment
           content: comment.trim(),
         }),
       })
+
+      // Notificación por correo via FormSubmit
+      const emailData = new FormData()
+      emailData.append('_subject', `Comentario en guion FTBP — ${blockRef ?? 'General'}`)
+      emailData.append('_captcha', 'false')
+      emailData.append('_template', 'table')
+      emailData.append('Bloque', blockRef ?? 'General')
+      emailData.append('Autor', name.trim() || 'Invitado')
+      emailData.append('Comentario', comment.trim())
+      emailData.append('Script ID', scriptId)
+      await fetch('https://formsubmit.co/cdgzkid@gmail.com', {
+        method: 'POST',
+        body: emailData,
+        headers: { Accept: 'application/json' },
+      })
+
       setSent(true)
       onSubmitted?.()
     } finally {

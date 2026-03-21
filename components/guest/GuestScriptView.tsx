@@ -211,9 +211,46 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
         </div>
       )}
 
-      {/* Footer */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '1.25rem', paddingBottom: '2rem', textAlign: 'center' }}>
-        <p style={{ color: 'rgba(242,240,237,0.3)', fontSize: '0.75rem' }}>
+      {/* Footer con plataformas y redes */}
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '1.5rem', paddingBottom: '2.5rem', textAlign: 'center' }}>
+        <p style={{ color: '#E0A858', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>
+          Escúchanos en
+        </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.625rem', marginBottom: '1.25rem' }}>
+          {[
+            { label: '🎙 Spotify', href: 'https://open.spotify.com/show/2trG9tv2AXRQfHhXfme59T' },
+            { label: '🎵 Apple Podcasts', href: 'https://podcasts.apple.com/mx/podcast/fuck-the-business-plan/id1886786227' },
+            { label: '🎶 Amazon Music', href: 'https://music.amazon.com.mx/podcasts/7e4713c0-1dea-4df2-81dd-913a3f1ebf06/fuck-the-business-plan' },
+          ].map((p) => (
+            <a
+              key={p.label}
+              href={p.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: '0.8125rem',
+                fontWeight: 500,
+                padding: '0.5rem 1rem',
+                borderRadius: '6px',
+                border: '1px solid rgba(255,255,255,0.12)',
+                color: 'rgba(242,240,237,0.7)',
+                textDecoration: 'none',
+                transition: 'border-color 0.2s',
+              }}
+            >
+              {p.label}
+            </a>
+          ))}
+        </div>
+        <a
+          href="https://www.instagram.com/fuckthebusinessplan/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.8125rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.375rem', marginBottom: '1rem' }}
+        >
+          📷 @fuckthebusinessplan
+        </a>
+        <p style={{ color: 'rgba(242,240,237,0.25)', fontSize: '0.75rem' }}>
           Fuck The Business Plan — Guadalajara, México
         </p>
       </div>
