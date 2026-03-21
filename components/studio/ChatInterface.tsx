@@ -44,6 +44,7 @@ export default function ChatInterface() {
   const [editMode, setEditMode] = useState(false)
   const [saving, setSaving] = useState(false)
   const [copiedLink, setCopiedLink] = useState(false)
+  const [episodeNum, setEpisodeNum] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -54,6 +55,20 @@ export default function ChatInterface() {
   useEffect(() => {
     const script = extractScript(messages)
     if (script) setScriptContent(script)
+  }, [messages])
+
+  useEffect(() => {
+    // Auto-detect episode number from conversation: find user reply after AI asks for it
+    for (let i = 0; i < messages.length - 1; i++) {
+      const msg = messages[i]
+      if (msg.role === 'assistant' && /episodio|n[uú]mero de ep/i.test(msg.content)) {
+        const reply = messages[i + 1]
+        if (reply?.role === 'user') {
+          const m = reply.content.match(/\d+/)
+          if (m) { setEpisodeNum(m[0]); break }
+        }
+      }
+    }
   }, [messages])
 
   async function sendMessage() {
@@ -151,26 +166,7 @@ export default function ChatInterface() {
       const guestMatch = scriptContent.match(/\*\*Invitado:\*\*\s*([^—\n]+)/)
       const guest_name = guestMatch ? guestMatch[1].trim() : 'Invitado'
 
-      // Extract episode number: first try script content, then scan conversation messages
-      let episode_number: number | null = null
-      const epInScript =
-        scriptContent.match(/\*\*Episodio:\*\*\s*(\d+)/) ??
-        scriptContent.match(/(?:episodio|ep\.?)[^\d]*(\d+)/i)
-      if (epInScript) {
-        episode_number = parseInt(epInScript[1])
-      } else {
-        // Look for user reply right after AI asks for episode number
-        for (let i = 0; i < messages.length - 1; i++) {
-          const msg = messages[i]
-          if (msg.role === 'assistant' && /episodio|n[uú]mero de ep/i.test(msg.content)) {
-            const reply = messages[i + 1]
-            if (reply?.role === 'user') {
-              const m = reply.content.match(/\d+/)
-              if (m) { episode_number = parseInt(m[0]); break }
-            }
-          }
-        }
-      }
+      const episode_number = episodeNum.trim() ? parseInt(episodeNum.trim()) : null
 
       const res = await fetch('/api/scripts', {
         method: 'POST',
@@ -340,14 +336,37 @@ export default function ChatInterface() {
             </h2>
 
             {!scriptId && (
-              <button
-                onClick={saveScript}
-                disabled={saving}
-                className="btn-primary"
-                style={{ cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.6 : 1 }}
-              >
-                {saving ? 'Guardando…' : 'Guardar guion'}
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <label style={{ color: 'var(--gold)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>
+                  T1 · Ep.
+                </label>
+                <input
+                  type="number"
+                  value={episodeNum}
+                  onChange={(e) => setEpisodeNum(e.target.value)}
+                  placeholder="N"
+                  style={{
+                    width: 52,
+                    background: 'var(--bg-input)',
+                    border: '1px solid var(--gold-border)',
+                    borderRadius: '6px',
+                    color: 'var(--gold)',
+                    fontSize: '0.875rem',
+                    fontWeight: 700,
+                    padding: '4px 8px',
+                    outline: 'none',
+                    textAlign: 'center',
+                  }}
+                />
+                <button
+                  onClick={saveScript}
+                  disabled={saving}
+                  className="btn-primary"
+                  style={{ cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.6 : 1 }}
+                >
+                  {saving ? 'Guardando…' : 'Guardar guion'}
+                </button>
+              </div>
             )}
 
             <button
