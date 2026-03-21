@@ -6,7 +6,7 @@ export default function NuevoGuionPage() {
       <div style={{ marginBottom: '1.5rem' }}>
         <h1
           style={{
-            color: '#F2F0ED',
+            color: 'var(--text-pri)',
             fontSize: '1.5rem',
             fontWeight: 700,
             marginBottom: '0.25rem',
@@ -14,7 +14,7 @@ export default function NuevoGuionPage() {
         >
           Nuevo guion
         </h1>
-        <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.875rem' }}>
+        <p style={{ color: 'var(--text-sec)', fontSize: '0.875rem' }}>
           Conversa con el asistente de producción para generar el guion del episodio.
         </p>
       </div>

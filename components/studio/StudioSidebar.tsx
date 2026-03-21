@@ -15,8 +15,8 @@ export default function StudioSidebar() {
       style={{
         width: 280,
         flexShrink: 0,
-        background: '#0F1011',
-        borderRight: '1px solid rgba(255,255,255,0.07)',
+        background: 'var(--bg-alt)',
+        borderRight: '1px solid var(--border)',
         display: 'flex',
         flexDirection: 'column',
         position: 'fixed',
@@ -30,14 +30,14 @@ export default function StudioSidebar() {
       <div
         style={{
           padding: '1.25rem 1rem 1rem',
-          borderBottom: '1px solid rgba(255,255,255,0.07)',
+          borderBottom: '1px solid var(--border)',
         }}
       >
         <Link href="/" style={{ textDecoration: 'none', display: 'block', marginBottom: '2px' }}>
           <span
             style={{
               fontFamily: 'var(--font-display)',
-              color: '#E0A858',
+              color: 'var(--gold)',
               fontSize: '1.125rem',
               fontWeight: 900,
               textTransform: 'uppercase',
@@ -53,7 +53,7 @@ export default function StudioSidebar() {
             fontWeight: 700,
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: 'rgba(242,240,237,0.35)',
+            color: 'var(--text-ter)',
           }}
         >
           Studio
@@ -68,7 +68,7 @@ export default function StudioSidebar() {
             fontWeight: 700,
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: 'rgba(242,240,237,0.3)',
+            color: 'var(--text-ter)',
             padding: '0 1rem',
             marginBottom: '0.5rem',
           }}
@@ -79,12 +79,12 @@ export default function StudioSidebar() {
       </div>
 
       {/* Logout */}
-      <div style={{ padding: '1rem', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+      <div style={{ padding: '1rem', borderTop: '1px solid var(--border)' }}>
         <a
           href="/studio/login"
           onClick={handleLogout}
           style={{
-            color: 'rgba(242,240,237,0.35)',
+            color: 'var(--text-ter)',
             fontSize: '0.8rem',
             textDecoration: 'none',
             display: 'block',
@@ -92,8 +92,8 @@ export default function StudioSidebar() {
             transition: 'color 200ms',
             cursor: 'pointer',
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#F2F0ED' }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(242,240,237,0.35)' }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-pri)' }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-ter)' }}
         >
           Cerrar sesión
         </a>

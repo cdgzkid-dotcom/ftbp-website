@@ -210,6 +210,40 @@ body {
 .hero-badges    { animation: fadeUp 0.7s ease-out 0.9s both; }
 .hero-cover     { animation: fadeIn 0.8s ease-out 0.2s both; }
 
+/* ===== STUDIO / GUEST THEME — day/night switching ===== */
+.studio-theme[data-theme="light"] {
+  --bg: #F5F4F1;
+  --bg-alt: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-input: #F0EEE9;
+  --border: rgba(0,0,0,0.08);
+  --text-pri: #111110;
+  --text-sec: rgba(17,17,16,0.55);
+  --text-ter: rgba(17,17,16,0.32);
+  --gold: #B8862A;
+  --gold-glow: rgba(184,134,42,0.15);
+  --gold-subtle: rgba(184,134,42,0.10);
+  --gold-border: rgba(184,134,42,0.25);
+  background: var(--bg);
+  color: var(--text-pri);
+}
+.studio-theme[data-theme="dark"] {
+  --bg: #161719;
+  --bg-alt: #0F1011;
+  --bg-card: #1A1B1D;
+  --bg-input: #1E1F21;
+  --border: rgba(255,255,255,0.07);
+  --text-pri: #F2F0ED;
+  --text-sec: rgba(242,240,237,0.50);
+  --text-ter: rgba(242,240,237,0.30);
+  --gold: #E0A858;
+  --gold-glow: rgba(224,168,88,0.18);
+  --gold-subtle: rgba(224,168,88,0.10);
+  --gold-border: rgba(224,168,88,0.28);
+  background: var(--bg);
+  color: var(--text-pri);
+}
+
 /* ===== GUION PAGE — mobile only ===== */
 @media (max-width: 768px) {
   .guion-page {

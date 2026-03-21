@@ -17,15 +17,6 @@ export default async function GuestPage({ params }: { params: Promise<{ token: s
   }
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: '#161719',
-        fontFamily: 'var(--font-body)',
-        fontSize: 16,
-      }}
-    >
-      <GuestScriptView script={script} />
-    </div>
+    <GuestScriptView script={script} />
   )
 }

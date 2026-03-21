@@ -5,6 +5,7 @@ import BlockCard from './BlockCard'
 import ApproveButton from './ApproveButton'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import ThemeManager from '@/components/ThemeManager'
 
 interface GuestScriptViewProps {
   script: {
@@ -158,7 +159,7 @@ function EpisodePlayer({ ep }: { ep: Episode }) {
   const { guest, company } = extractGuestAndCompany(ep.title)
 
   return (
-    <div style={{ background: '#1A1B1D', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px', overflow: 'hidden' }}>
+    <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '8px', overflow: 'hidden' }}>
       <audio
         ref={audioRef}
         src={ep.audioUrl}
@@ -175,7 +176,7 @@ function EpisodePlayer({ ep }: { ep: Episode }) {
           onClick={toggle}
           style={{
             width: 36, height: 36, borderRadius: '50%',
-            background: '#E0A858', border: 'none', cursor: 'pointer',
+            background: 'var(--gold)', border: 'none', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             flexShrink: 0, color: '#111', fontSize: '0.875rem',
           }}
@@ -183,9 +184,9 @@ function EpisodePlayer({ ep }: { ep: Episode }) {
           {playing ? '⏸' : '▶'}
         </button>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.6rem', fontWeight: 600, marginBottom: '2px' }}>EP. {ep.number} · {ep.pubDate}</p>
+          <p style={{ color: 'var(--text-ter)', fontSize: '0.6rem', fontWeight: 600, marginBottom: '2px' }}>EP. {ep.number} · {ep.pubDate}</p>
           {guest && (
-            <p style={{ color: '#E0A858', fontSize: '0.8rem', fontWeight: 700, marginBottom: '1px', lineHeight: '1.2' }}>
+            <p style={{ color: 'var(--gold)', fontSize: '0.8rem', fontWeight: 700, marginBottom: '1px', lineHeight: '1.2' }}>
               {guest}
             </p>
           )}
@@ -194,25 +195,25 @@ function EpisodePlayer({ ep }: { ep: Episode }) {
               {company}
             </p>
           )}
-          <p style={{ color: 'rgba(242,240,237,0.6)', fontSize: '0.7rem', lineHeight: '1.3', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          <p style={{ color: 'var(--text-sec)', fontSize: '0.7rem', lineHeight: '1.3', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {ep.title.split('—')[0].split('con ')[0].trim()}
           </p>
         </div>
       </div>
       {playing && (
         <div style={{ padding: '0 0.625rem 0.625rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.6rem', color: 'rgba(242,240,237,0.4)', marginBottom: '3px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.6rem', color: 'var(--text-ter)', marginBottom: '3px' }}>
             <span>{fmt(current)}</span><span>{fmt(duration)}</span>
           </div>
           <div
-            style={{ height: 3, background: 'rgba(255,255,255,0.1)', borderRadius: 2, cursor: 'pointer' }}
+            style={{ height: 3, background: 'var(--border)', borderRadius: 2, cursor: 'pointer' }}
             onClick={(e) => {
               const rect = e.currentTarget.getBoundingClientRect()
               const pct = (e.clientX - rect.left) / rect.width
               if (audioRef.current) audioRef.current.currentTime = pct * audioRef.current.duration
             }}
           >
-            <div style={{ height: '100%', width: `${progress}%`, background: '#E0A858', borderRadius: 2 }} />
+            <div style={{ height: '100%', width: `${progress}%`, background: 'var(--gold)', borderRadius: 2 }} />
           </div>
         </div>
       )}
@@ -243,22 +244,22 @@ function Sidebar({ episodes }: { episodes: Episode[] }) {
       />
       {/* Mobile-only brand label */}
       <div className="guion-mobile-brand" style={{ display: 'none', flexDirection: 'column' }}>
-        <span style={{ color: '#E0A858', fontSize: '0.75rem', fontWeight: 800, fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+        <span style={{ color: 'var(--gold)', fontSize: '0.75rem', fontWeight: 800, fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
           Fuck The Business Plan
         </span>
-        <span style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.65rem' }}>
+        <span style={{ color: 'var(--text-ter)', fontSize: '0.65rem' }}>
           Guion de episodio
         </span>
       </div>
 
       {/* Hosts */}
       <div className="guion-sidebar-detail">
-        <p style={{ color: 'rgba(242,240,237,0.45)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Hosts</p>
+        <p style={{ color: 'var(--text-ter)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Hosts</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {HOSTS.map(h => (
             <div key={h.name} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <img src={h.image} alt={h.name} width={32} height={32} style={{ borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
-              <span style={{ color: '#F2F0ED', fontSize: '0.8125rem', fontWeight: 500 }}>{h.name}</span>
+              <span style={{ color: 'var(--text-pri)', fontSize: '0.8125rem', fontWeight: 500 }}>{h.name}</span>
             </div>
           ))}
         </div>
@@ -266,14 +267,14 @@ function Sidebar({ episodes }: { episodes: Episode[] }) {
 
       {/* Plataformas */}
       <div className="guion-sidebar-detail">
-        <p style={{ color: 'rgba(242,240,237,0.45)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Escúchanos en</p>
+        <p style={{ color: 'var(--text-ter)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Escúchanos en</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
           {PLATFORMS.map((p) => (
-            <a key={p.label} href={p.href} target="_blank" rel="noopener noreferrer" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 500, padding: '0.5rem 0.75rem', borderRadius: '7px', border: '1px solid rgba(224,168,88,0.2)', background: 'rgba(224,168,88,0.04)', color: '#F2F0ED', textDecoration: 'none' }}>
+            <a key={p.label} href={p.href} target="_blank" rel="noopener noreferrer" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 500, padding: '0.5rem 0.75rem', borderRadius: '7px', border: '1px solid var(--gold-border)', background: 'var(--gold-subtle)', color: 'var(--text-pri)', textDecoration: 'none' }}>
               {p.label}
             </a>
           ))}
-          <a href="https://www.instagram.com/fuckthebusinessplan/" target="_blank" rel="noopener noreferrer" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 500, padding: '0.5rem 0.75rem', borderRadius: '7px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', color: '#F2F0ED', textDecoration: 'none' }}>
+          <a href="https://www.instagram.com/fuckthebusinessplan/" target="_blank" rel="noopener noreferrer" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 500, padding: '0.5rem 0.75rem', borderRadius: '7px', border: '1px solid var(--border)', background: 'var(--bg-input)', color: 'var(--text-pri)', textDecoration: 'none' }}>
             📷 @fuckthebusinessplan
           </a>
         </div>
@@ -282,7 +283,7 @@ function Sidebar({ episodes }: { episodes: Episode[] }) {
       {/* Episodios */}
       {episodes.length > 0 && (
         <div className="guion-sidebar-detail">
-          <p style={{ color: 'rgba(242,240,237,0.45)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Episodios anteriores</p>
+          <p style={{ color: 'var(--text-ter)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Episodios anteriores</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {episodes.map((ep) => <EpisodePlayer key={ep.number} ep={ep} />)}
           </div>
@@ -308,7 +309,8 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
   }, [])
 
   return (
-    <div className="guion-page" style={{ maxWidth: 1100, margin: '0 auto', padding: '1.5rem 1rem', minHeight: '100vh', background: '#161719', fontFamily: 'var(--font-body)', display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+    <ThemeManager>
+    <div className="guion-page" style={{ maxWidth: 1100, margin: '0 auto', padding: '1.5rem 1rem', minHeight: '100vh', background: 'var(--bg)', fontFamily: 'var(--font-body)', display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
       {/* Sidebar */}
       <Sidebar episodes={episodes} />
 
@@ -316,14 +318,14 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
       <div className="guion-main" style={{ flex: 1, minWidth: 0 }}>
 
       {/* ── Mobile-only header ── */}
-      <div className="guion-mobile-header" style={{ display: 'none', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem', padding: '0.875rem', background: '#1A1B1D', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.07)' }}>
+      <div className="guion-mobile-header" style={{ display: 'none', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem', padding: '0.875rem', background: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border)' }}>
 
         {/* Row 1: Cover + brand name + platform icons (top right) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <img src="/images/ftbp-cover.png" alt="FTBP" style={{ width: 48, height: 48, borderRadius: 8, flexShrink: 0, border: '1px solid rgba(224,168,88,0.3)' }} />
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ color: '#E0A858', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1.2 }}>Fuck The Business Plan</p>
-            <p style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.6rem', marginTop: 2 }}>Podcast de emprendimiento</p>
+            <p style={{ color: 'var(--gold)', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1.2 }}>Fuck The Business Plan</p>
+            <p style={{ color: 'var(--text-ter)', fontSize: '0.6rem', marginTop: 2 }}>Podcast de emprendimiento</p>
           </div>
           {/* Platform icons — top right, sin contenedor */}
           <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0, alignItems: 'center' }}>
@@ -348,7 +350,7 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
           {HOSTS.map(h => (
             <div key={h.name} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <img src={h.image} alt={h.name} width={26} height={26} style={{ borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(224,168,88,0.4)', flexShrink: 0 }} />
-              <span style={{ color: 'rgba(242,240,237,0.7)', fontSize: '0.7rem', fontWeight: 500 }}>{h.name}</span>
+              <span style={{ color: 'var(--text-sec)', fontSize: '0.7rem', fontWeight: 500 }}>{h.name}</span>
             </div>
           ))}
         </div>
@@ -365,13 +367,13 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
           marginBottom: '1.5rem',
         }}
       >
-        <p style={{ color: '#E0A858', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.375rem' }}>
+        <p style={{ color: 'var(--gold)', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.375rem' }}>
           Fuck The Business Plan — Guion de episodio
         </p>
-        <h1 style={{ color: '#F2F0ED', fontSize: '1.375rem', fontWeight: 700, lineHeight: '1.3', marginBottom: '0.5rem' }}>
+        <h1 style={{ color: 'var(--text-pri)', fontSize: '1.375rem', fontWeight: 700, lineHeight: '1.3', marginBottom: '0.5rem' }}>
           Hola{script.guest_name ? `, ${script.guest_name}` : ''}
         </h1>
-        <p style={{ color: 'rgba(242,240,237,0.65)', fontSize: '0.9rem', lineHeight: '1.65' }}>
+        <p style={{ color: 'var(--text-sec)', fontSize: '0.9rem', lineHeight: '1.65' }}>
           Aquí está el guion de conversación que preparamos para tu episodio. Está pensado como una guía,
           no como un script. Léelo con calma, deja comentarios en los bloques que quieras ajustar,
           y apruébalo cuando estés listo.
@@ -381,8 +383,8 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
       {/* Header / metadata */}
       <div
         style={{
-          background: '#1A1B1D',
-          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border)',
           borderRadius: '12px',
           padding: '1.25rem',
           marginBottom: '1.5rem',
@@ -392,19 +394,19 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
           remarkPlugins={[remarkGfm]}
           components={{
             h1: ({ children }) => (
-              <h2 style={{ color: '#E0A858', fontSize: '1.25rem', fontWeight: 900, fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.02em', marginBottom: '0.5rem' }}>
+              <h2 style={{ color: 'var(--gold)', fontSize: '1.25rem', fontWeight: 900, fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.02em', marginBottom: '0.5rem' }}>
                 {children}
               </h2>
             ),
             p: ({ children }) => (
-              <p style={{ color: 'rgba(242,240,237,0.7)', fontSize: '0.875rem', lineHeight: '1.6', marginBottom: '0.375rem' }}>
+              <p style={{ color: 'var(--text-sec)', fontSize: '0.875rem', lineHeight: '1.6', marginBottom: '0.375rem' }}>
                 {children}
               </p>
             ),
             strong: ({ children }) => (
-              <strong style={{ color: '#F2F0ED', fontWeight: 600 }}>{children}</strong>
+              <strong style={{ color: 'var(--text-pri)', fontWeight: 600 }}>{children}</strong>
             ),
-            hr: () => <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.07)', margin: '0.75rem 0' }} />,
+            hr: () => <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '0.75rem 0' }} />,
           }}
         >
           {header}
@@ -428,8 +430,8 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
       {cierre && (
         <div
           style={{
-            background: '#1A1B1D',
-            border: '1px solid rgba(255,255,255,0.08)',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border)',
             borderRadius: '12px',
             padding: '1.25rem',
             marginBottom: '1.5rem',
@@ -439,20 +441,20 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
             remarkPlugins={[remarkGfm]}
             components={{
               h2: ({ children }) => (
-                <h3 style={{ color: '#F2F0ED', fontSize: '1rem', fontWeight: 700, fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.75rem', borderLeft: '3px solid #E0A858', paddingLeft: '0.75rem' }}>
+                <h3 style={{ color: 'var(--text-pri)', fontSize: '1rem', fontWeight: 700, fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.75rem', borderLeft: '3px solid var(--gold)', paddingLeft: '0.75rem' }}>
                   {children}
                 </h3>
               ),
               p: ({ children }) => (
-                <p style={{ color: 'rgba(242,240,237,0.7)', fontSize: '0.875rem', lineHeight: '1.7', marginBottom: '0.5rem' }}>
+                <p style={{ color: 'var(--text-sec)', fontSize: '0.875rem', lineHeight: '1.7', marginBottom: '0.5rem' }}>
                   {children}
                 </p>
               ),
               strong: ({ children }) => (
-                <strong style={{ color: '#F2F0ED', fontWeight: 600 }}>{children}</strong>
+                <strong style={{ color: 'var(--text-pri)', fontWeight: 600 }}>{children}</strong>
               ),
               ul: ({ children }) => (
-                <ul style={{ color: 'rgba(242,240,237,0.65)', paddingLeft: '1.25rem', marginBottom: '0.5rem', listStyleType: 'disc' }}>
+                <ul style={{ color: 'var(--text-sec)', paddingLeft: '1.25rem', marginBottom: '0.5rem', listStyleType: 'disc' }}>
                   {children}
                 </ul>
               ),
@@ -470,14 +472,14 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
       {!isApproved && (
         <div
           style={{
-            background: '#1A1B1D',
-            border: '1px solid rgba(255,255,255,0.08)',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border)',
             borderRadius: '12px',
             padding: '1.25rem',
             marginBottom: '2rem',
           }}
         >
-          <p style={{ color: 'rgba(242,240,237,0.6)', fontSize: '0.875rem', marginBottom: '1rem', lineHeight: '1.6' }}>
+          <p style={{ color: 'var(--text-sec)', fontSize: '0.875rem', marginBottom: '1rem', lineHeight: '1.6' }}>
             ¿Todo bien con el guion? Al aprobarlo le avisas al equipo de producción que estás listo.
             Si quieres cambios, deja un comentario en el bloque correspondiente.
           </p>
@@ -497,18 +499,19 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
           }}
         >
           <p style={{ color: '#4ade80', fontWeight: 700, marginBottom: '0.25rem' }}>Guion aprobado</p>
-          <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.875rem' }}>El equipo de producción fue notificado.</p>
+          <p style={{ color: 'var(--text-sec)', fontSize: '0.875rem' }}>El equipo de producción fue notificado.</p>
         </div>
       )}
 
       {/* Footer */}
       <div style={{ paddingBottom: '2rem', marginTop: '1rem' }}>
-        <p style={{ color: 'rgba(242,240,237,0.2)', fontSize: '0.75rem' }}>
+        <p style={{ color: 'var(--text-ter)', fontSize: '0.75rem' }}>
           Fuck The Business Plan — Guadalajara, México
         </p>
       </div>
 
       </div>{/* end main */}
     </div>
+    </ThemeManager>
   )
 }

@@ -85,7 +85,7 @@ export default function ScriptDetailPage() {
 
   if (loading) {
     return (
-      <div style={{ color: 'rgba(242,240,237,0.4)', padding: '2rem', fontSize: '0.9rem' }}>
+      <div style={{ color: 'var(--text-sec)', padding: '2rem', fontSize: '0.9rem' }}>
         Cargando guion…
       </div>
     )
@@ -110,7 +110,7 @@ export default function ScriptDetailPage() {
       {/* Back */}
       <Link
         href="/studio"
-        style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.8125rem', textDecoration: 'none', display: 'inline-block', marginBottom: '1rem' }}
+        style={{ color: 'var(--text-sec)', fontSize: '0.8125rem', textDecoration: 'none', display: 'inline-block', marginBottom: '1rem' }}
       >
         ← Todos los guiones
       </Link>
@@ -119,12 +119,12 @@ export default function ScriptDetailPage() {
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '4px' }}>
-            <span style={{ color: '#E0A858', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            <span style={{ color: 'var(--gold)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               T{script.season_number ?? 1}
             </span>
             {editingEp ? (
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
-                <span style={{ color: '#E0A858', fontSize: '0.75rem', fontWeight: 700 }}> · Ep.</span>
+                <span style={{ color: 'var(--gold)', fontSize: '0.75rem', fontWeight: 700 }}> · Ep.</span>
                 <input
                   autoFocus
                   type="number"
@@ -133,32 +133,32 @@ export default function ScriptDetailPage() {
                   onBlur={saveEpisodeNumber}
                   onKeyDown={(e) => { if (e.key === 'Enter') saveEpisodeNumber(); if (e.key === 'Escape') setEditingEp(false) }}
                   placeholder="N"
-                  style={{ width: 48, background: 'rgba(224,168,88,0.1)', border: '1px solid #E0A858', borderRadius: 4, color: '#E0A858', fontSize: '0.75rem', fontWeight: 700, padding: '1px 4px', outline: 'none' }}
+                  style={{ width: 48, background: 'rgba(224,168,88,0.1)', border: '1px solid var(--gold)', borderRadius: 4, color: 'var(--gold)', fontSize: '0.75rem', fontWeight: 700, padding: '1px 4px', outline: 'none' }}
                 />
               </span>
             ) : (
               <button
                 onClick={() => setEditingEp(true)}
                 title="Editar número de episodio"
-                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: '#E0A858', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', textDecoration: epInput ? 'none' : 'underline dotted', opacity: epInput ? 1 : 0.6 }}
+                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--gold)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', textDecoration: epInput ? 'none' : 'underline dotted', opacity: epInput ? 1 : 0.6 }}
               >
                 {epInput ? ` · Ep. ${epInput}` : ' · Ep. ?'}
               </button>
             )}
           </div>
-          <h1 style={{ color: '#F2F0ED', fontSize: '1.375rem', fontWeight: 700, marginBottom: '4px' }}>
+          <h1 style={{ color: 'var(--text-pri)', fontSize: '1.375rem', fontWeight: 700, marginBottom: '4px' }}>
             {script.guest_name ?? 'Sin invitado'}
           </h1>
           {script.company && (
-            <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.875rem', marginBottom: '6px' }}>
+            <p style={{ color: 'var(--text-sec)', fontSize: '0.875rem', marginBottom: '6px' }}>
               {script.company}
             </p>
           )}
           <span
             style={{
               display: 'inline-block',
-              background: status === 'approved' ? 'rgba(74,222,128,0.12)' : status === 'review' ? 'rgba(224,168,88,0.12)' : 'rgba(255,255,255,0.06)',
-              color: status === 'approved' ? '#4ade80' : status === 'review' ? '#E0A858' : 'rgba(242,240,237,0.4)',
+              background: status === 'approved' ? 'rgba(74,222,128,0.12)' : status === 'review' ? 'rgba(224,168,88,0.12)' : 'var(--border)',
+              color: status === 'approved' ? '#4ade80' : status === 'review' ? 'var(--gold)' : 'var(--text-sec)',
               fontSize: '0.7rem',
               fontWeight: 700,
               textTransform: 'uppercase',
@@ -193,8 +193,8 @@ export default function ScriptDetailPage() {
       {/* Script */}
       <div
         style={{
-          background: '#1A1B1D',
-          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border)',
           borderRadius: '12px',
           padding: '1.5rem',
           marginBottom: '1.5rem',
@@ -215,13 +215,13 @@ export default function ScriptDetailPage() {
       {comments.length > 0 && (
         <div
           style={{
-            background: '#1A1B1D',
-            border: '1px solid rgba(255,255,255,0.08)',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border)',
             borderRadius: '12px',
             padding: '1.25rem',
           }}
         >
-          <h2 style={{ color: '#F2F0ED', fontSize: '1rem', fontWeight: 700, marginBottom: '1rem' }}>
+          <h2 style={{ color: 'var(--text-pri)', fontSize: '1rem', fontWeight: 700, marginBottom: '1rem' }}>
             Comentarios del invitado ({comments.length})
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -229,26 +229,26 @@ export default function ScriptDetailPage() {
               <div
                 key={c.id}
                 style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.07)',
+                  background: 'var(--bg-input)',
+                  border: '1px solid var(--border)',
                   borderRadius: '8px',
                   padding: '0.875rem',
                 }}
               >
                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.375rem', flexWrap: 'wrap' }}>
-                  <span style={{ color: '#F2F0ED', fontSize: '0.8125rem', fontWeight: 600 }}>
+                  <span style={{ color: 'var(--text-pri)', fontSize: '0.8125rem', fontWeight: 600 }}>
                     {c.author_name ?? 'Anónimo'}
                   </span>
                   {c.block_ref && (
-                    <span style={{ color: '#E0A858', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', background: 'rgba(224,168,88,0.1)', padding: '1px 6px', borderRadius: '4px' }}>
+                    <span style={{ color: 'var(--gold)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', background: 'rgba(224,168,88,0.1)', padding: '1px 6px', borderRadius: '4px' }}>
                       {c.block_ref}
                     </span>
                   )}
-                  <span style={{ color: 'rgba(242,240,237,0.3)', fontSize: '0.75rem', marginLeft: 'auto' }}>
+                  <span style={{ color: 'var(--text-ter)', fontSize: '0.75rem', marginLeft: 'auto' }}>
                     {new Date(c.created_at).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
-                <p style={{ color: 'rgba(242,240,237,0.7)', fontSize: '0.875rem', lineHeight: '1.6' }}>
+                <p style={{ color: 'var(--text-sec)', fontSize: '0.875rem', lineHeight: '1.6' }}>
                   {c.content}
                 </p>
               </div>
