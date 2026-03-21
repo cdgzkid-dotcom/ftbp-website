@@ -19,8 +19,8 @@ export default function BlockCard({ scriptId, blockTitle, blockContent, blockInd
   return (
     <div
       style={{
-        background: '#1A1B1D',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border)',
         borderRadius: '12px',
         overflow: 'hidden',
       }}
@@ -28,9 +28,9 @@ export default function BlockCard({ scriptId, blockTitle, blockContent, blockInd
       {/* Block header */}
       <div
         style={{
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid var(--border)',
           padding: '1rem 1.25rem',
-          background: 'rgba(224,168,88,0.05)',
+          background: 'var(--gold-subtle)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
@@ -51,7 +51,7 @@ export default function BlockCard({ scriptId, blockTitle, blockContent, blockInd
           </span>
           <h3
             style={{
-              color: '#F2F0ED',
+              color: 'var(--text-pri)',
               fontSize: '0.9375rem',
               fontWeight: 700,
               fontFamily: 'var(--font-display)',
@@ -70,18 +70,18 @@ export default function BlockCard({ scriptId, blockTitle, blockContent, blockInd
           remarkPlugins={[remarkGfm]}
           components={{
             p: ({ children }) => (
-              <p style={{ color: 'rgba(242,240,237,0.7)', fontSize: '0.9rem', lineHeight: '1.7', marginBottom: '0.625rem' }}>
+              <p style={{ color: 'var(--text-sec)', fontSize: '0.9rem', lineHeight: '1.7', marginBottom: '0.625rem' }}>
                 {children}
               </p>
             ),
             strong: ({ children }) => (
-              <strong style={{ color: '#F2F0ED', fontWeight: 600 }}>{children}</strong>
+              <strong style={{ color: 'var(--text-pri)', fontWeight: 600 }}>{children}</strong>
             ),
             em: ({ children }) => (
-              <em style={{ color: '#E0A858', fontStyle: 'italic' }}>{children}</em>
+              <em style={{ color: 'var(--gold)', fontStyle: 'italic' }}>{children}</em>
             ),
             ul: ({ children }) => (
-              <ul style={{ color: 'rgba(242,240,237,0.7)', paddingLeft: '1.25rem', marginBottom: '0.5rem', listStyleType: 'disc' }}>
+              <ul style={{ color: 'var(--text-sec)', paddingLeft: '1.25rem', marginBottom: '0.5rem', listStyleType: 'disc' }}>
                 {children}
               </ul>
             ),
@@ -94,16 +94,16 @@ export default function BlockCard({ scriptId, blockTitle, blockContent, blockInd
         </ReactMarkdown>
 
         {/* Comment toggle */}
-        <div style={{ marginTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '0.875rem' }}>
+        <div style={{ marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '0.875rem' }}>
           {!submitted ? (
             <>
               <button
                 onClick={() => setShowForm((v) => !v)}
                 style={{
                   background: 'transparent',
-                  border: '1px solid rgba(255,255,255,0.12)',
+                  border: '1px solid var(--border)',
                   borderRadius: '6px',
-                  color: 'rgba(242,240,237,0.6)',
+                  color: 'var(--text-sec)',
                   fontSize: '0.8125rem',
                   padding: '6px 12px',
                   cursor: 'pointer',
@@ -116,8 +116,8 @@ export default function BlockCard({ scriptId, blockTitle, blockContent, blockInd
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLButtonElement
-                  el.style.borderColor = 'rgba(255,255,255,0.12)'
-                  el.style.color = 'rgba(242,240,237,0.6)'
+                  el.style.borderColor = 'var(--border)'
+                  el.style.color = 'var(--text-sec)'
                 }}
               >
                 {showForm ? 'Cancelar' : 'Dejar comentario'}
@@ -132,7 +132,7 @@ export default function BlockCard({ scriptId, blockTitle, blockContent, blockInd
               )}
             </>
           ) : (
-            <p style={{ color: '#E0A858', fontSize: '0.8125rem' }}>
+            <p style={{ color: 'var(--gold)', fontSize: '0.8125rem' }}>
               Comentario enviado en este bloque.
             </p>
           )}
