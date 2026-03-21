@@ -181,27 +181,26 @@ function EpisodePlayer({ ep }: { ep: Episode }) {
 
 function Sidebar({ episodes }: { episodes: Episode[] }) {
   return (
-    <aside style={{
-      width: 270,
-      flexShrink: 0,
-      position: 'sticky',
-      top: '1rem',
-      alignSelf: 'flex-start',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '1.25rem',
-      maxHeight: 'calc(100vh - 2rem)',
-      overflowY: 'auto',
-    }}>
+    <aside className="guion-sidebar">
       {/* Portada */}
       <img
+        className="guion-sidebar-cover"
         src="/images/ftbp-cover.png"
         alt="Fuck The Business Plan"
         style={{ width: '100%', borderRadius: '10px', display: 'block' }}
       />
+      {/* Mobile brand name (hidden on desktop) */}
+      <div className="guion-sidebar-brand" style={{ display: 'none' }}>
+        <span style={{ color: '#E0A858', fontSize: '0.75rem', fontWeight: 800, fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          Fuck The Business Plan
+        </span>
+        <span style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.65rem' }}>
+          Guion de episodio
+        </span>
+      </div>
 
       {/* Hosts */}
-      <div>
+      <div className="guion-sidebar-hosts">
         <p style={{ color: 'rgba(242,240,237,0.45)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Hosts</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {HOSTS.map(h => (
@@ -214,7 +213,7 @@ function Sidebar({ episodes }: { episodes: Episode[] }) {
       </div>
 
       {/* Plataformas */}
-      <div>
+      <div className="guion-sidebar-platforms">
         <p style={{ color: 'rgba(242,240,237,0.45)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Escúchanos en</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
           {PLATFORMS.map((p) => (
@@ -230,7 +229,7 @@ function Sidebar({ episodes }: { episodes: Episode[] }) {
 
       {/* Episodios */}
       {episodes.length > 0 && (
-        <div>
+        <div className="guion-sidebar-episodes">
           <p style={{ color: 'rgba(242,240,237,0.45)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Episodios anteriores</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {episodes.map((ep) => <EpisodePlayer key={ep.number} ep={ep} />)}
@@ -257,14 +256,15 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
   }, [])
 
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto', padding: '1.5rem 1rem', minHeight: '100vh', background: '#161719', fontFamily: 'var(--font-body)', display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+    <div className="guion-layout">
       {/* Sidebar */}
       <Sidebar episodes={episodes} />
 
       {/* Main content */}
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div className="guion-main">
       {/* Welcome banner */}
       <div
+        className="guion-welcome"
         style={{
           background: 'rgba(224,168,88,0.08)',
           border: '1px solid rgba(224,168,88,0.2)',
@@ -288,6 +288,7 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
 
       {/* Header / metadata */}
       <div
+        className="guion-section"
         style={{
           background: '#1A1B1D',
           border: '1px solid rgba(255,255,255,0.08)',
@@ -335,6 +336,7 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
       {/* Cierre */}
       {cierre && (
         <div
+          className="guion-section"
           style={{
             background: '#1A1B1D',
             border: '1px solid rgba(255,255,255,0.08)',
@@ -377,6 +379,7 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
       {/* Approve button */}
       {!isApproved && (
         <div
+          className="guion-section"
           style={{
             background: '#1A1B1D',
             border: '1px solid rgba(255,255,255,0.08)',
@@ -395,6 +398,7 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
 
       {isApproved && (
         <div
+          className="guion-section"
           style={{
             background: 'rgba(74,222,128,0.08)',
             border: '1px solid rgba(74,222,128,0.2)',

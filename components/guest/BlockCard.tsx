@@ -27,6 +27,7 @@ export default function BlockCard({ scriptId, blockTitle, blockContent, blockInd
     >
       {/* Block header */}
       <div
+        className="guion-block-header"
         style={{
           borderBottom: '1px solid rgba(255,255,255,0.06)',
           padding: '1rem 1.25rem',
@@ -65,7 +66,7 @@ export default function BlockCard({ scriptId, blockTitle, blockContent, blockInd
       </div>
 
       {/* Block content */}
-      <div style={{ padding: '1.25rem' }}>
+      <div className="guion-block-body" style={{ padding: '1.25rem' }}>
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
