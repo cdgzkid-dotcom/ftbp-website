@@ -87,12 +87,38 @@ REGLAS CRÍTICAS — NUNCA violar estas reglas:
 
 export async function POST(req: Request) {
   const { messages } = await req.json()
-  const stream = await client.messages.stream({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 8096,
-    system: SYSTEM_PROMPT,
-    messages,
-    tools: [{ type: 'web_search_20250305' as const, name: 'web_search' }]
+  const encoder = new TextEncoder()
+
+  const readable = new ReadableStream({
+    async start(controller) {
+      try {
+        const stream = client.messages.stream({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 8096,
+          system: SYSTEM_PROMPT,
+          messages,
+          tools: [{ type: 'web_search_20250305' as const, name: 'web_search' }],
+        })
+
+        for await (const event of stream) {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`))
+        }
+
+        controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+        controller.close()
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Error desconocido'
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'error', message: msg })}\n\n`))
+        controller.close()
+      }
+    },
   })
-  return new Response(stream.toReadableStream())
+
+  return new Response(readable, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    },
+  })
 }
