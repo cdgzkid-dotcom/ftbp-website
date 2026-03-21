@@ -20,6 +20,7 @@ interface Script {
   guest_name?: string
   company?: string
   episode_number?: number | string
+  season_number?: number | string
   status?: string
   content: string
   created_at?: string
@@ -40,14 +41,31 @@ export default function ScriptDetailPage() {
   const [loading, setLoading] = useState(true)
   const [editMode, setEditMode] = useState(false)
   const [copiedLink, setCopiedLink] = useState(false)
+  const [epInput, setEpInput] = useState('')
+  const [editingEp, setEditingEp] = useState(false)
 
   useEffect(() => {
     if (!id) return
     fetch(`/api/scripts/${id}`)
       .then((r) => r.json())
-      .then((data) => setScript(data))
+      .then((data) => {
+        setScript(data)
+        setEpInput(data.episode_number != null ? String(data.episode_number) : '')
+      })
       .finally(() => setLoading(false))
   }, [id])
+
+  async function saveEpisodeNumber() {
+    if (!script) return
+    setEditingEp(false)
+    const num = epInput.trim() ? parseInt(epInput.trim()) : null
+    await fetch(`/api/scripts/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ episode_number: num }),
+    })
+    setScript((prev) => prev ? { ...prev, episode_number: num ?? undefined } : prev)
+  }
 
   function copyGuestLink() {
     if (!script?.share_token) return
@@ -92,11 +110,34 @@ export default function ScriptDetailPage() {
       {/* Header */}
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         <div style={{ flex: 1 }}>
-          {script.episode_number && (
-            <span style={{ color: '#E0A858', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: '4px' }}>
-              Ep. {script.episode_number}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '4px' }}>
+            <span style={{ color: '#E0A858', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              T{script.season_number ?? 1}
             </span>
-          )}
+            {editingEp ? (
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                <span style={{ color: '#E0A858', fontSize: '0.75rem', fontWeight: 700 }}> · Ep.</span>
+                <input
+                  autoFocus
+                  type="number"
+                  value={epInput}
+                  onChange={(e) => setEpInput(e.target.value)}
+                  onBlur={saveEpisodeNumber}
+                  onKeyDown={(e) => { if (e.key === 'Enter') saveEpisodeNumber(); if (e.key === 'Escape') setEditingEp(false) }}
+                  placeholder="N"
+                  style={{ width: 48, background: 'rgba(224,168,88,0.1)', border: '1px solid #E0A858', borderRadius: 4, color: '#E0A858', fontSize: '0.75rem', fontWeight: 700, padding: '1px 4px', outline: 'none' }}
+                />
+              </span>
+            ) : (
+              <button
+                onClick={() => setEditingEp(true)}
+                title="Editar número de episodio"
+                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: '#E0A858', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', textDecoration: epInput ? 'none' : 'underline dotted', opacity: epInput ? 1 : 0.6 }}
+              >
+                {epInput ? ` · Ep. ${epInput}` : ' · Ep. ?'}
+              </button>
+            )}
+          </div>
           <h1 style={{ color: '#F2F0ED', fontSize: '1.375rem', fontWeight: 700, marginBottom: '4px' }}>
             {script.guest_name ?? 'Sin invitado'}
           </h1>

@@ -6,6 +6,7 @@ export async function GET() {
   const { data, error } = await getSupabaseAdmin()
     .from('scripts')
     .select('*')
+    .eq('podcast', 'ftbp')
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -24,6 +25,7 @@ export async function POST(req: Request) {
     .insert({
       ...body,
       share_token,
+      podcast: 'ftbp',
       status: body.status ?? 'draft',
     })
     .select('id, share_token')
