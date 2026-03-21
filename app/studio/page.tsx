@@ -1,38 +1,43 @@
-export const dynamic = 'force-dynamic'
+'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import ScriptCard from '@/components/studio/ScriptCard'
-import { getSupabaseAdmin } from '@/lib/supabase'
 
-async function getScripts() {
-  const { data } = await getSupabaseAdmin()
-    .from('scripts')
-    .select('id, share_token, guest_name, company, episode_number, status, created_at')
-    .order('created_at', { ascending: false })
-    .limit(20)
-  return data ?? []
+interface Script {
+  id: string
+  share_token: string
+  guest_name?: string
+  company?: string
+  episode_number?: number | string
+  season_number?: number | string
+  status?: string
+  created_at?: string
 }
 
-export default async function StudioPage() {
-  const scripts = await getScripts()
+export default function StudioPage() {
+  const [scripts, setScripts] = useState<Script[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/scripts')
+      .then((r) => r.json())
+      .then((data) => { if (Array.isArray(data)) setScripts(data) })
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
     <div>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1
-            style={{
-              color: '#F2F0ED',
-              fontSize: '1.5rem',
-              fontWeight: 700,
-              marginBottom: '0.25rem',
-            }}
-          >
+          <h1 style={{ color: '#F2F0ED', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.25rem' }}>
             Guiones
           </h1>
           <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.875rem' }}>
-            {scripts.length === 0
+            {loading
+              ? 'Cargando…'
+              : scripts.length === 0
               ? 'No hay guiones todavía.'
               : `${scripts.length} guion${scripts.length !== 1 ? 'es' : ''} en total`}
           </p>
@@ -44,7 +49,7 @@ export default async function StudioPage() {
       </div>
 
       {/* Scripts grid */}
-      {scripts.length === 0 ? (
+      {!loading && scripts.length === 0 ? (
         <div
           style={{
             background: '#1A1B1D',

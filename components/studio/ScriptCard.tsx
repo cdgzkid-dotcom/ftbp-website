@@ -10,6 +10,7 @@ interface ScriptCardProps {
     guest_name?: string
     company?: string
     episode_number?: number | string
+    season_number?: number | string
     status?: string
     created_at?: string
   }
@@ -60,11 +61,9 @@ export default function ScriptCard({ script }: ScriptCardProps) {
     >
       <Link href={`/studio/guion/${script.id}`} style={{ flex: 1, textDecoration: 'none' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-          {script.episode_number && (
-            <span style={{ color: 'var(--gold)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-              Ep. {script.episode_number}
-            </span>
-          )}
+          <span style={{ color: 'var(--gold)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            {`T${script.season_number ?? 1}`}{script.episode_number ? ` · Ep. ${script.episode_number}` : ''}
+          </span>
           <span style={{ color: 'var(--text-pri)', fontWeight: 600, fontSize: '1rem' }}>
             {script.guest_name ?? 'Sin invitado'}
           </span>
