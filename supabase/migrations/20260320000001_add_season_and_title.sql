@@ -1,0 +1,2 @@
+ALTER TABLE scripts ADD COLUMN IF NOT EXISTS season_number int DEFAULT 1;
+ALTER TABLE scripts ADD COLUMN IF NOT EXISTS title text;

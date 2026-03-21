@@ -7,9 +7,11 @@ import { useRouter } from 'next/navigation'
 interface Script {
   id: string
   share_token: string
+  title?: string
   guest_name?: string
-  company?: string
+  guest_company?: string
   episode_number?: number | string
+  season_number?: number | string
   status?: string
   created_at?: string
 }
@@ -81,17 +83,17 @@ export default function ScriptList() {
               onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.03)' }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent' }}
             >
-              {s.episode_number && (
+              {(s.season_number || s.episode_number) && (
                 <div style={{ color: 'var(--gold)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '2px' }}>
-                  Ep. {s.episode_number}
+                  {s.season_number ? `T${s.season_number}` : ''}{s.season_number && s.episode_number ? ' · ' : ''}{s.episode_number ? `Ep. ${s.episode_number}` : ''}
                 </div>
               )}
-              <div style={{ color: 'var(--text-pri)', fontSize: '0.875rem', fontWeight: 500, marginBottom: '2px' }}>
+              <div style={{ color: 'var(--text-pri)', fontSize: '0.875rem', fontWeight: 600, marginBottom: '1px' }}>
                 {s.guest_name ?? 'Sin invitado'}
               </div>
-              {s.company && (
-                <div style={{ color: 'var(--text-sec)', fontSize: '0.75rem', marginBottom: '4px' }}>
-                  {s.company}
+              {s.title && (
+                <div style={{ color: 'var(--text-sec)', fontSize: '0.775rem', marginBottom: '2px', lineHeight: '1.3' }}>
+                  {s.title}
                 </div>
               )}
               <span style={{

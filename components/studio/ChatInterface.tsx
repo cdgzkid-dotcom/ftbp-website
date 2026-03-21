@@ -148,7 +148,7 @@ export default function ChatInterface() {
       const res = await fetch('/api/scripts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: scriptContent, title, guest_name, status: 'draft' }),
+        body: JSON.stringify({ content: scriptContent, title, guest_name, season_number: 1, status: 'draft' }),
       })
       const data = await res.json()
       if (data.id) {
