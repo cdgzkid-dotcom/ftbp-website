@@ -242,6 +242,16 @@ body {
     display: flex !important;
   }
 
+  /* Hide sidebar entirely on mobile — mobile header replaces it */
+  .guion-sidebar {
+    display: none !important;
+  }
+
+  /* Show mobile header block */
+  .guion-mobile-header {
+    display: flex !important;
+  }
+
   .guion-page h1 {
     font-size: 1.15rem !important;
   }
