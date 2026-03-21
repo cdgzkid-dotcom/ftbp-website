@@ -1,6 +1,11 @@
 import Anthropic from '@anthropic-ai/sdk'
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+export const maxDuration = 60
+
+const client = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+  defaultHeaders: { 'anthropic-beta': 'web-search-2025-03-05' },
+})
 
 const SYSTEM_PROMPT = `Eres el asistente de producción del podcast "Fuck The Business Plan" (FTBP),
 conducido por Christian Dominguez y Juan Carlos Rico desde Guadalajara, México.
