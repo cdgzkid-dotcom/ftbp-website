@@ -145,8 +145,10 @@ export default function ChatInterface() {
       const guestMatch = scriptContent.match(/\*\*Invitado:\*\*\s*([^—\n]+)/)
       const guest_name = guestMatch ? guestMatch[1].trim() : 'Invitado'
 
-      // Extract episode number from "Episodio N" or "Ep. N" in the content
-      const epMatch = scriptContent.match(/(?:episodio|ep\.?)\s*(\d+)/i)
+      // Extract episode number from "**Episodio:** N" or fallback patterns
+      const epMatch =
+        scriptContent.match(/\*\*Episodio:\*\*\s*(\d+)/) ??
+        scriptContent.match(/(?:episodio|ep\.?)[^\d]*(\d+)/i)
       const episode_number = epMatch ? parseInt(epMatch[1]) : null
 
       const res = await fetch('/api/scripts', {

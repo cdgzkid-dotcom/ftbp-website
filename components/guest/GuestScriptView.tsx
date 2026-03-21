@@ -68,9 +68,30 @@ interface Episode {
   guest?: string
 }
 
-function extractGuest(title: string): string {
-  const m = title.match(/(?:con|—\s*)([A-ZÁÉÍÓÚÑ][^,|—\n]+?)(?:\s+de\s+|\s*[,|]|\s*$)/u)
-  return m ? m[1].trim() : ''
+function extractGuestAndCompany(title: string): { guest: string; company: string } {
+  const clean = title.split(' | ')[0].trim()
+
+  // "con Name de Company" or "— con Name de Company"
+  const conDe = clean.match(/\bcon\s+([A-ZÁÉÍÓÚÑ][A-Za-záéíóúüñÁÉÍÓÚÜÑ .]+?)\s+de\s+([A-ZÁÉÍÓÚÑ][^,|—\n]+?)(?:\s*$|\s*[—|,])/u)
+  if (conDe) return { guest: conDe[1].trim(), company: conDe[2].trim() }
+
+  // "— Name, Company [| ...]"
+  const dashComma = clean.match(/—\s+([A-ZÁÉÍÓÚÑ][^,|—\n]+?),\s*([^,|—\n]+?)(?:\s*$|\s*[|—])/u)
+  if (dashComma) return { guest: dashComma[1].trim(), company: dashComma[2].trim() }
+
+  // "— Name de Company"
+  const dashDe = clean.match(/—\s+([A-ZÁÉÍÓÚÑ][^,|—\n]+?)\s+de\s+([A-ZÁÉÍÓÚÑ][^,|—\n]+?)(?:\s*$|\s*[—|,])/u)
+  if (dashDe) return { guest: dashDe[1].trim(), company: dashDe[2].trim() }
+
+  // "con Name" (no company)
+  const con = clean.match(/\bcon\s+([A-ZÁÉÍÓÚÑ][^|—\n,]+?)(?:\s*$|\s*[—|,])/u)
+  if (con) return { guest: con[1].trim(), company: '' }
+
+  // "— Name" (no company)
+  const dash = clean.match(/—\s+([A-ZÁÉÍÓÚÑ][^,|—\n]+?)(?:\s*$|\s*[|—,])/u)
+  if (dash) return { guest: dash[1].trim(), company: '' }
+
+  return { guest: '', company: '' }
 }
 
 function EpisodePlayer({ ep }: { ep: Episode }) {
@@ -93,7 +114,7 @@ function EpisodePlayer({ ep }: { ep: Episode }) {
     return `${m}:${sec.toString().padStart(2, '0')}`
   }
 
-  const guest = ep.guest || extractGuest(ep.title)
+  const { guest, company } = extractGuestAndCompany(ep.title)
 
   return (
     <div style={{ background: '#1A1B1D', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px', overflow: 'hidden' }}>
@@ -123,8 +144,13 @@ function EpisodePlayer({ ep }: { ep: Episode }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.6rem', fontWeight: 600, marginBottom: '2px' }}>EP. {ep.number} · {ep.pubDate}</p>
           {guest && (
-            <p style={{ color: '#E0A858', fontSize: '0.8rem', fontWeight: 700, marginBottom: '2px', lineHeight: '1.2' }}>
+            <p style={{ color: '#E0A858', fontSize: '0.8rem', fontWeight: 700, marginBottom: '1px', lineHeight: '1.2' }}>
               {guest}
+            </p>
+          )}
+          {company && (
+            <p style={{ color: 'rgba(224,168,88,0.6)', fontSize: '0.7rem', fontWeight: 600, marginBottom: '2px', lineHeight: '1.2' }}>
+              {company}
             </p>
           )}
           <p style={{ color: 'rgba(242,240,237,0.6)', fontSize: '0.7rem', lineHeight: '1.3', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>

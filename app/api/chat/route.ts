@@ -38,6 +38,7 @@ Cuando generes el guion, usa exactamente esta estructura:
 ---
 # [TÍTULO EN MAYÚSCULAS] — [SUBTÍTULO DESCRIPTIVO]
 **Invitado:** [Nombre] — [Cargo] de [Empresa]
+**Episodio:** [número]
 **Hosts:** Christian + Juan Carlos Rico
 **Formato:** Entrevista conversacional con bloques temáticos
 **Duración:** ~50 minutos | 5 bloques de ~10 minutos
