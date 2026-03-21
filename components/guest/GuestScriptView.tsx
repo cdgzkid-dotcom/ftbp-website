@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import BlockCard from './BlockCard'
 import ApproveButton from './ApproveButton'
 import ReactMarkdown from 'react-markdown'
@@ -53,113 +53,157 @@ const PLATFORMS = [
   { label: '🎶 Amazon Music', href: 'https://music.amazon.com.mx/podcasts/7e4713c0-1dea-4df2-81dd-913a3f1ebf06/fuck-the-business-plan' },
 ]
 
+const HOSTS = [
+  { name: 'Christian Dominguez', image: '/images/christian.jpg' },
+  { name: 'Juan Carlos Rico', image: '/images/juancarlos.png' },
+]
+
 interface Episode {
   number: number
   title: string
   pubDate: string
   duration: string
   imageUrl: string
+  audioUrl: string
+  guest?: string
+}
+
+function extractGuest(title: string): string {
+  const m = title.match(/(?:con|—\s*)([A-ZÁÉÍÓÚÑ][^,|—\n]+?)(?:\s+de\s+|\s*[,|]|\s*$)/u)
+  return m ? m[1].trim() : ''
+}
+
+function EpisodePlayer({ ep }: { ep: Episode }) {
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const [playing, setPlaying] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [current, setCurrent] = useState(0)
+  const [duration, setDuration] = useState(0)
+
+  function toggle() {
+    const a = audioRef.current
+    if (!a) return
+    if (playing) { a.pause(); setPlaying(false) }
+    else { a.play(); setPlaying(true) }
+  }
+
+  function fmt(s: number) {
+    if (!s || isNaN(s)) return '0:00'
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60)
+    return `${m}:${sec.toString().padStart(2, '0')}`
+  }
+
+  const guest = ep.guest || extractGuest(ep.title)
+
+  return (
+    <div style={{ background: '#1A1B1D', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px', overflow: 'hidden' }}>
+      <audio
+        ref={audioRef}
+        src={ep.audioUrl}
+        onTimeUpdate={() => {
+          const a = audioRef.current!
+          setCurrent(a.currentTime)
+          setDuration(a.duration)
+          setProgress(a.duration ? (a.currentTime / a.duration) * 100 : 0)
+        }}
+        onEnded={() => setPlaying(false)}
+      />
+      <div style={{ display: 'flex', gap: '0.625rem', padding: '0.625rem', alignItems: 'center' }}>
+        <button
+          onClick={toggle}
+          style={{
+            width: 36, height: 36, borderRadius: '50%',
+            background: '#E0A858', border: 'none', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0, color: '#111', fontSize: '0.875rem',
+          }}
+        >
+          {playing ? '⏸' : '▶'}
+        </button>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{ color: '#E0A858', fontSize: '0.6rem', fontWeight: 700, marginBottom: '1px' }}>EP. {ep.number} · {ep.pubDate}</p>
+          {guest && <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.65rem', marginBottom: '2px' }}>{guest}</p>}
+          <p style={{ color: '#F2F0ED', fontSize: '0.725rem', lineHeight: '1.3', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            {ep.title.split('—')[0].split('con ')[0].trim()}
+          </p>
+        </div>
+      </div>
+      {playing && (
+        <div style={{ padding: '0 0.625rem 0.625rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.6rem', color: 'rgba(242,240,237,0.4)', marginBottom: '3px' }}>
+            <span>{fmt(current)}</span><span>{fmt(duration)}</span>
+          </div>
+          <div
+            style={{ height: 3, background: 'rgba(255,255,255,0.1)', borderRadius: 2, cursor: 'pointer' }}
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect()
+              const pct = (e.clientX - rect.left) / rect.width
+              if (audioRef.current) audioRef.current.currentTime = pct * audioRef.current.duration
+            }}
+          >
+            <div style={{ height: '100%', width: `${progress}%`, background: '#E0A858', borderRadius: 2 }} />
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 function Sidebar({ episodes }: { episodes: Episode[] }) {
   return (
     <aside style={{
-      width: 260,
+      width: 270,
       flexShrink: 0,
       position: 'sticky',
       top: '1rem',
       alignSelf: 'flex-start',
       display: 'flex',
       flexDirection: 'column',
-      gap: '1.5rem',
+      gap: '1.25rem',
+      maxHeight: 'calc(100vh - 2rem)',
+      overflowY: 'auto',
     }}>
-      {/* Logo */}
-      <div>
-        <p style={{ color: '#E0A858', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '2px' }}>
-          FUCK THE BUSINESS PLAN
-        </p>
-        <p style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.75rem' }}>Guadalajara, México</p>
-      </div>
+      {/* Portada */}
+      <img
+        src="/images/ftbp-cover.png"
+        alt="Fuck The Business Plan"
+        style={{ width: '100%', borderRadius: '10px', display: 'block' }}
+      />
 
-      {/* Plataformas */}
+      {/* Hosts */}
       <div>
-        <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.625rem' }}>
-          Escúchanos en
-        </p>
+        <p style={{ color: 'rgba(242,240,237,0.45)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Hosts</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {PLATFORMS.map((p) => (
-            <a
-              key={p.label}
-              href={p.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'block',
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                padding: '0.625rem 0.875rem',
-                borderRadius: '8px',
-                border: '1px solid rgba(224,168,88,0.25)',
-                background: 'rgba(224,168,88,0.05)',
-                color: '#F2F0ED',
-                textDecoration: 'none',
-              }}
-            >
-              {p.label}
-            </a>
+          {HOSTS.map(h => (
+            <div key={h.name} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <img src={h.image} alt={h.name} width={32} height={32} style={{ borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+              <span style={{ color: '#F2F0ED', fontSize: '0.8125rem', fontWeight: 500 }}>{h.name}</span>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Instagram */}
+      {/* Plataformas */}
       <div>
-        <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.625rem' }}>
-          Síguenos
-        </p>
-        <a
-          href="https://www.instagram.com/fuckthebusinessplan/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'block',
-            fontSize: '0.875rem',
-            fontWeight: 500,
-            padding: '0.625rem 0.875rem',
-            borderRadius: '8px',
-            border: '1px solid rgba(255,255,255,0.1)',
-            background: 'rgba(255,255,255,0.04)',
-            color: '#F2F0ED',
-            textDecoration: 'none',
-          }}
-        >
-          📷 @fuckthebusinessplan
-        </a>
+        <p style={{ color: 'rgba(242,240,237,0.45)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Escúchanos en</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+          {PLATFORMS.map((p) => (
+            <a key={p.label} href={p.href} target="_blank" rel="noopener noreferrer" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 500, padding: '0.5rem 0.75rem', borderRadius: '7px', border: '1px solid rgba(224,168,88,0.2)', background: 'rgba(224,168,88,0.04)', color: '#F2F0ED', textDecoration: 'none' }}>
+              {p.label}
+            </a>
+          ))}
+          <a href="https://www.instagram.com/fuckthebusinessplan/" target="_blank" rel="noopener noreferrer" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 500, padding: '0.5rem 0.75rem', borderRadius: '7px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', color: '#F2F0ED', textDecoration: 'none' }}>
+            📷 @fuckthebusinessplan
+          </a>
+        </div>
       </div>
 
-      {/* Episodios recientes */}
+      {/* Episodios */}
       {episodes.length > 0 && (
         <div>
-          <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.625rem' }}>
-            Episodios recientes
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {episodes.slice(0, 4).map((ep) => (
-              <div key={ep.number} style={{ display: 'flex', gap: '0.625rem', alignItems: 'flex-start' }}>
-                <img
-                  src={ep.imageUrl}
-                  alt={ep.title}
-                  width={40}
-                  height={40}
-                  style={{ borderRadius: '6px', flexShrink: 0, objectFit: 'cover' }}
-                />
-                <div>
-                  <p style={{ color: '#E0A858', fontSize: '0.65rem', fontWeight: 700, marginBottom: '1px' }}>Ep. {ep.number}</p>
-                  <p style={{ color: 'rgba(242,240,237,0.75)', fontSize: '0.775rem', lineHeight: '1.35', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                    {ep.title}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <p style={{ color: 'rgba(242,240,237,0.45)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Episodios anteriores</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {episodes.map((ep) => <EpisodePlayer key={ep.number} ep={ep} />)}
           </div>
         </div>
       )}
@@ -178,7 +222,7 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
   useMemo(() => {
     fetch('/episodes.json')
       .then(r => r.json())
-      .then(d => setEpisodes(d.items ?? []))
+      .then(d => setEpisodes((d.items ?? []) as Episode[]))
       .catch(() => {})
   }, [])
 
