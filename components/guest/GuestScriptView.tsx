@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import BlockCard from './BlockCard'
 import ApproveButton from './ApproveButton'
 import ReactMarkdown from 'react-markdown'
@@ -47,24 +47,148 @@ function parseCierre(content: string): string | null {
   return content.slice(idx).trim()
 }
 
+const PLATFORMS = [
+  { label: '🎙 Spotify', href: 'https://open.spotify.com/show/2trG9tv2AXRQfHhXfme59T' },
+  { label: '🎵 Apple Podcasts', href: 'https://podcasts.apple.com/mx/podcast/fuck-the-business-plan/id1886786227' },
+  { label: '🎶 Amazon Music', href: 'https://music.amazon.com.mx/podcasts/7e4713c0-1dea-4df2-81dd-913a3f1ebf06/fuck-the-business-plan' },
+]
+
+interface Episode {
+  number: number
+  title: string
+  pubDate: string
+  duration: string
+  imageUrl: string
+}
+
+function Sidebar({ episodes }: { episodes: Episode[] }) {
+  return (
+    <aside style={{
+      width: 260,
+      flexShrink: 0,
+      position: 'sticky',
+      top: '1rem',
+      alignSelf: 'flex-start',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '1.5rem',
+    }}>
+      {/* Logo */}
+      <div>
+        <p style={{ color: '#E0A858', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '2px' }}>
+          FUCK THE BUSINESS PLAN
+        </p>
+        <p style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.75rem' }}>Guadalajara, México</p>
+      </div>
+
+      {/* Plataformas */}
+      <div>
+        <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.625rem' }}>
+          Escúchanos en
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          {PLATFORMS.map((p) => (
+            <a
+              key={p.label}
+              href={p.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                padding: '0.625rem 0.875rem',
+                borderRadius: '8px',
+                border: '1px solid rgba(224,168,88,0.25)',
+                background: 'rgba(224,168,88,0.05)',
+                color: '#F2F0ED',
+                textDecoration: 'none',
+              }}
+            >
+              {p.label}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Instagram */}
+      <div>
+        <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.625rem' }}>
+          Síguenos
+        </p>
+        <a
+          href="https://www.instagram.com/fuckthebusinessplan/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'block',
+            fontSize: '0.875rem',
+            fontWeight: 500,
+            padding: '0.625rem 0.875rem',
+            borderRadius: '8px',
+            border: '1px solid rgba(255,255,255,0.1)',
+            background: 'rgba(255,255,255,0.04)',
+            color: '#F2F0ED',
+            textDecoration: 'none',
+          }}
+        >
+          📷 @fuckthebusinessplan
+        </a>
+      </div>
+
+      {/* Episodios recientes */}
+      {episodes.length > 0 && (
+        <div>
+          <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.625rem' }}>
+            Episodios recientes
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {episodes.slice(0, 4).map((ep) => (
+              <div key={ep.number} style={{ display: 'flex', gap: '0.625rem', alignItems: 'flex-start' }}>
+                <img
+                  src={ep.imageUrl}
+                  alt={ep.title}
+                  width={40}
+                  height={40}
+                  style={{ borderRadius: '6px', flexShrink: 0, objectFit: 'cover' }}
+                />
+                <div>
+                  <p style={{ color: '#E0A858', fontSize: '0.65rem', fontWeight: 700, marginBottom: '1px' }}>Ep. {ep.number}</p>
+                  <p style={{ color: 'rgba(242,240,237,0.75)', fontSize: '0.775rem', lineHeight: '1.35', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {ep.title}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </aside>
+  )
+}
+
 export default function GuestScriptView({ script }: GuestScriptViewProps) {
   const blocks = useMemo(() => parseBlocks(script.content), [script.content])
   const header = useMemo(() => parseHeader(script.content), [script.content])
   const cierre = useMemo(() => parseCierre(script.content), [script.content])
-
+  const [episodes, setEpisodes] = useState<Episode[]>([])
   const isApproved = script.status === 'approved'
 
+  // Load episodes from static JSON
+  useMemo(() => {
+    fetch('/episodes.json')
+      .then(r => r.json())
+      .then(d => setEpisodes(d.items ?? []))
+      .catch(() => {})
+  }, [])
+
   return (
-    <div
-      style={{
-        maxWidth: 720,
-        margin: '0 auto',
-        padding: '1rem',
-        minHeight: '100vh',
-        background: '#161719',
-        fontFamily: 'var(--font-body)',
-      }}
-    >
+    <div style={{ maxWidth: 1100, margin: '0 auto', padding: '1.5rem 1rem', minHeight: '100vh', background: '#161719', fontFamily: 'var(--font-body)', display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+      {/* Sidebar */}
+      <Sidebar episodes={episodes} />
+
+      {/* Main content */}
+      <div style={{ flex: 1, minWidth: 0 }}>
       {/* Welcome banner */}
       <div
         style={{
@@ -211,74 +335,14 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
         </div>
       )}
 
-      {/* Plataformas y redes */}
-      <div style={{ background: '#1A1B1D', border: '1px solid rgba(224,168,88,0.2)', borderRadius: '12px', padding: '1.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>
-        <p style={{ color: '#E0A858', fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.375rem' }}>
-          Tu episodio se publicará en
-        </p>
-        <p style={{ color: 'rgba(242,240,237,0.55)', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
-          Disponible en las principales plataformas de podcasts el día de publicación.
-        </p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-          {[
-            { label: '🎙 Spotify', href: 'https://open.spotify.com/show/2trG9tv2AXRQfHhXfme59T' },
-            { label: '🎵 Apple Podcasts', href: 'https://podcasts.apple.com/mx/podcast/fuck-the-business-plan/id1886786227' },
-            { label: '🎶 Amazon Music', href: 'https://music.amazon.com.mx/podcasts/7e4713c0-1dea-4df2-81dd-913a3f1ebf06/fuck-the-business-plan' },
-          ].map((p) => (
-            <a
-              key={p.label}
-              href={p.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontSize: '0.9rem',
-                fontWeight: 600,
-                padding: '0.75rem 1.25rem',
-                borderRadius: '8px',
-                border: '1px solid rgba(224,168,88,0.3)',
-                background: 'rgba(224,168,88,0.06)',
-                color: '#F2F0ED',
-                textDecoration: 'none',
-                display: 'inline-block',
-              }}
-            >
-              {p.label}
-            </a>
-          ))}
-        </div>
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '1.25rem' }}>
-          <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.85rem', marginBottom: '0.625rem' }}>
-            Síguenos en Instagram para estar al tanto de la publicación
-          </p>
-          <a
-            href="https://www.instagram.com/fuckthebusinessplan/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              color: '#F2F0ED',
-              fontSize: '1rem',
-              fontWeight: 700,
-              textDecoration: 'none',
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '8px',
-              padding: '0.625rem 1.25rem',
-            }}
-          >
-            📷 @fuckthebusinessplan
-          </a>
-        </div>
-      </div>
-
       {/* Footer */}
-      <div style={{ paddingBottom: '2rem', textAlign: 'center' }}>
+      <div style={{ paddingBottom: '2rem', marginTop: '1rem' }}>
         <p style={{ color: 'rgba(242,240,237,0.2)', fontSize: '0.75rem' }}>
           Fuck The Business Plan — Guadalajara, México
         </p>
       </div>
+
+      </div>{/* end main */}
     </div>
   )
 }
