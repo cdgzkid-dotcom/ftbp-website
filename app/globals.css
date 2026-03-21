@@ -252,6 +252,19 @@ body {
     display: flex !important;
   }
 
+  /* Platform icon buttons — dim by default, brand color on hover */
+  .guion-platform-icon {
+    opacity: 0.35;
+    transition: opacity 0.18s ease;
+  }
+  .guion-platform-btn:hover .guion-platform-icon {
+    opacity: 1;
+  }
+  .guion-platform-btn:hover {
+    background: rgba(255,255,255,0.12) !important;
+    border-color: rgba(255,255,255,0.2) !important;
+  }
+
   .guion-page h1 {
     font-size: 1.15rem !important;
   }
