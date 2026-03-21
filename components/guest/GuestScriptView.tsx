@@ -211,12 +211,15 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
         </div>
       )}
 
-      {/* Footer con plataformas y redes */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '1.5rem', paddingBottom: '2.5rem', textAlign: 'center' }}>
-        <p style={{ color: '#E0A858', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>
-          Escúchanos en
+      {/* Plataformas y redes */}
+      <div style={{ background: '#1A1B1D', border: '1px solid rgba(224,168,88,0.2)', borderRadius: '12px', padding: '1.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+        <p style={{ color: '#E0A858', fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.375rem' }}>
+          Tu episodio se publicará en
         </p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.625rem', marginBottom: '1.25rem' }}>
+        <p style={{ color: 'rgba(242,240,237,0.55)', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
+          Disponible en las principales plataformas de podcasts el día de publicación.
+        </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
           {[
             { label: '🎙 Spotify', href: 'https://open.spotify.com/show/2trG9tv2AXRQfHhXfme59T' },
             { label: '🎵 Apple Podcasts', href: 'https://podcasts.apple.com/mx/podcast/fuck-the-business-plan/id1886786227' },
@@ -228,29 +231,51 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                fontSize: '0.8125rem',
-                fontWeight: 500,
-                padding: '0.5rem 1rem',
-                borderRadius: '6px',
-                border: '1px solid rgba(255,255,255,0.12)',
-                color: 'rgba(242,240,237,0.7)',
+                fontSize: '0.9rem',
+                fontWeight: 600,
+                padding: '0.75rem 1.25rem',
+                borderRadius: '8px',
+                border: '1px solid rgba(224,168,88,0.3)',
+                background: 'rgba(224,168,88,0.06)',
+                color: '#F2F0ED',
                 textDecoration: 'none',
-                transition: 'border-color 0.2s',
+                display: 'inline-block',
               }}
             >
               {p.label}
             </a>
           ))}
         </div>
-        <a
-          href="https://www.instagram.com/fuckthebusinessplan/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: 'rgba(242,240,237,0.4)', fontSize: '0.8125rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.375rem', marginBottom: '1rem' }}
-        >
-          📷 @fuckthebusinessplan
-        </a>
-        <p style={{ color: 'rgba(242,240,237,0.25)', fontSize: '0.75rem' }}>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '1.25rem' }}>
+          <p style={{ color: 'rgba(242,240,237,0.5)', fontSize: '0.85rem', marginBottom: '0.625rem' }}>
+            Síguenos en Instagram para estar al tanto de la publicación
+          </p>
+          <a
+            href="https://www.instagram.com/fuckthebusinessplan/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              color: '#F2F0ED',
+              fontSize: '1rem',
+              fontWeight: 700,
+              textDecoration: 'none',
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '8px',
+              padding: '0.625rem 1.25rem',
+            }}
+          >
+            📷 @fuckthebusinessplan
+          </a>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{ paddingBottom: '2rem', textAlign: 'center' }}>
+        <p style={{ color: 'rgba(242,240,237,0.2)', fontSize: '0.75rem' }}>
           Fuck The Business Plan — Guadalajara, México
         </p>
       </div>
