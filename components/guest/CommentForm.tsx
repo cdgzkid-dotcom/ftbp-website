@@ -33,6 +33,7 @@ export default function CommentForm({ scriptId, blockRef, onSubmitted }: Comment
       // Notificación por correo via FormSubmit
       const emailData = new FormData()
       emailData.append('_subject', `Comentario en guion FTBP — ${blockRef ?? 'General'}`)
+      emailData.append('_cc', 'jcrico@move.partners')
       emailData.append('_captcha', 'false')
       emailData.append('_template', 'table')
       emailData.append('Bloque', blockRef ?? 'General')

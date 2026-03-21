@@ -22,6 +22,7 @@ export default function ApproveButton({ scriptId }: ApproveButtonProps) {
         // Notificación por correo via FormSubmit
         const emailData = new FormData()
         emailData.append('_subject', `✅ Guion aprobado — FTBP`)
+        emailData.append('_cc', 'jcrico@move.partners')
         emailData.append('_captcha', 'false')
         emailData.append('_template', 'table')
         emailData.append('Estado', 'Aprobado')
