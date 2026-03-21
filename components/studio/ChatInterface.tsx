@@ -137,16 +137,28 @@ export default function ChatInterface() {
     if (!scriptContent || saving) return
     setSaving(true)
     try {
+      // Extract title from "# TÍTULO — SUBTÍTULO"
+      const titleMatch = scriptContent.match(/^#\s+(.+)/m)
+      const title = titleMatch ? titleMatch[1].trim() : 'Sin título'
+
+      // Extract guest name from "**Invitado:** Nombre — ..."
+      const guestMatch = scriptContent.match(/\*\*Invitado:\*\*\s*([^—\n]+)/)
+      const guest_name = guestMatch ? guestMatch[1].trim() : 'Invitado'
+
       const res = await fetch('/api/scripts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: scriptContent, status: 'draft' }),
+        body: JSON.stringify({ content: scriptContent, title, guest_name, status: 'draft' }),
       })
       const data = await res.json()
       if (data.id) {
         setScriptId(data.id)
         setShareToken(data.share_token)
+      } else {
+        alert('Error al guardar: ' + (data.error ?? 'desconocido'))
       }
+    } catch (e) {
+      alert('Error de conexión al guardar.')
     } finally {
       setSaving(false)
     }
