@@ -121,7 +121,7 @@ export default function ScriptList() {
                 onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent' }}
               >
                 <div style={{ color: 'var(--gold)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '2px' }}>
-                  {`T${s.season_number ?? parseSeasonFromContent(s.content) || 1}`}
+                  {`T${s.season_number ?? (parseSeasonFromContent(s.content) || 1)}`}
                   {(() => { const ep = s.episode_number ?? parseEpFromContent(s.content); return ep ? ` · Ep. ${ep}` : ' · Ep. ?' })()}
                 </div>
                 <div style={{ color: 'var(--text-pri)', fontSize: '0.875rem', fontWeight: 600, marginBottom: '1px' }}>

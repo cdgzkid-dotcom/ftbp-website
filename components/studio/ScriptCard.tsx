@@ -59,7 +59,7 @@ export default function ScriptCard({ script }: ScriptCardProps) {
       ? String(script.episode_number)
       : parseEpFromContent(script.content)
   )
-  const season = script.season_number ?? parseSeasonFromContent(script.content) || '1'
+  const season = script.season_number ?? (parseSeasonFromContent(script.content) || '1')
   const [editingEp, setEditingEp] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
