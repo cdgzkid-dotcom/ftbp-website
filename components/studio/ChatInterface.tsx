@@ -22,7 +22,13 @@ function extractScript(messages: Message[]): string {
   for (let i = messages.length - 1; i >= 0; i--) {
     const msg = messages[i]
     if (msg.role === 'assistant' && isScriptGenerated(msg.content)) {
-      return msg.content
+      // Strip any preamble before the script (e.g. "Perfecto, generando el guion...")
+      // The script always starts with --- followed by the # title
+      const scriptStart = msg.content.search(/^---\s*\n#/m)
+      if (scriptStart >= 0) return msg.content.slice(scriptStart)
+      // Fallback: strip everything before the first ---
+      const dashIdx = msg.content.indexOf('---')
+      return dashIdx > 0 ? msg.content.slice(dashIdx) : msg.content
     }
   }
   return ''
