@@ -32,7 +32,7 @@ export default function Episodes() {
   const [dur, setDur] = useState("--:--");
   const audioRef = useRef<HTMLAudioElement>(null);
   useEffect(() => {
-    fetch(`/episodes.json`)
+    fetch(`/api/episodes`)
       .then((r) => r.json())
       .then((data) => setEpisodes(data.items ?? []))
       .catch(() => {});
