@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.ftbplan.com"),
   title: "Fuck The Business Plan | Podcast de Emprendimiento",
   description:
     "Conversaciones sin filtro sobre emprendimiento real con Christian Dominguez y Juan Carlos Rico. Nuevos episodios cada semana.",
@@ -9,8 +10,10 @@ export const metadata: Metadata = {
     title: "Fuck The Business Plan",
     description:
       "El podcast de negocios sin filtro. Sin el discurso de LinkedIn.",
-    images: ["/images/ftbp-cover.png"],
+    images: [{ url: "/images/ftbp-cover.png", width: 1400, height: 1400 }],
     type: "website",
+    url: "https://www.ftbplan.com",
+    siteName: "Fuck The Business Plan",
   },
   twitter: {
     card: "summary_large_image",
