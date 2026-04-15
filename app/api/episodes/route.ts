@@ -3,13 +3,13 @@ import { NextResponse } from 'next/server'
 const RSS_URL = 'https://anchor.fm/s/10eee8608/podcast/rss'
 const MAX_EPISODES = 6
 
-export const revalidate = 3600 // caché 1 hora
+export const dynamic = 'force-dynamic' // siempre fresco, sin caché en edge
 
 export async function GET() {
   try {
     const res = await fetch(RSS_URL, {
       headers: { 'User-Agent': 'Mozilla/5.0' },
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
 
     if (!res.ok) throw new Error(`RSS fetch failed: ${res.status}`)
@@ -60,7 +60,9 @@ export async function GET() {
       }
     })
 
-    return NextResponse.json({ items })
+    return NextResponse.json({ items }, {
+      headers: { 'Cache-Control': 's-maxage=3600, stale-while-revalidate=86400' },
+    })
   } catch (err) {
     console.error('Episodes API error:', err)
     return NextResponse.json({ items: [] }, { status: 500 })

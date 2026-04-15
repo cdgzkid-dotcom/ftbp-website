@@ -300,9 +300,9 @@ export default function GuestScriptView({ script }: GuestScriptViewProps) {
   const [episodes, setEpisodes] = useState<Episode[]>([])
   const isApproved = script.status === 'approved'
 
-  // Load episodes from static JSON
+  // Load episodes from API (always fresh from RSS)
   useMemo(() => {
-    fetch('/episodes.json')
+    fetch('/api/episodes')
       .then(r => r.json())
       .then(d => setEpisodes((d.items ?? []) as Episode[]))
       .catch(() => {})
